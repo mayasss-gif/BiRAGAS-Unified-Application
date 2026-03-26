@@ -545,7 +545,8 @@ BiRAGAS Unified Bioinformatics Platform v1.0 — Ayass Bioscience LLC — 837 mo
 </div>
 
 <script>
-const A='http://localhost:8000';
+const BACKENDS=['https://biragas-unified.onrender.com','http://localhost:8000'];
+let A=BACKENDS[0];
 const charts={};
 let SERVER=false;
 
@@ -677,18 +678,23 @@ function demoData(ep,bd){
   return{status:'demo',message:'Demo mode — start python3 start.py for live data'};
 }
 
-/* ── Status check ── */
-async function ck(){try{
-  const r=await fetch(A+'/api/status',{signal:AbortSignal.timeout(3000)});
-  if(r.ok){SERVER=true;const d=await r.json();document.getElementById('sd').className='dot dot-g';document.getElementById('st').textContent=d.engines_loaded+' engines';
-  const e=await(await fetch(A+'/api/engines')).json();document.getElementById('eng-badge').textContent=e.length+' active';
-  document.getElementById('eng-list').innerHTML='<div style="display:flex;flex-wrap:wrap;gap:5px">'+e.map(n=>`<span class="badge badge-blue">${n}</span>`).join('')+'</div>';return}
-}catch(e){}
-SERVER=false;document.getElementById('sd').className='dot dot-o';document.getElementById('st').textContent='Demo Mode';
-const engines=['EditingEngine','KnockoutEngine','CombinationEngine','ACEScoringEngine','MegaScaleEngine','ScreeningEngine','RNABaseEditEngine','TranscriptomeEngine','NonCodingEngine','FullCausalityIntegrator','SelfCorrector','DEGEngine','PathwayEngine','DrugDiscoveryEngine','DeconvolutionEngine','SingleCellEngine','MultiOmicsEngine','GWASEngine'];
-document.getElementById('eng-badge').textContent=engines.length+' (demo)';
-document.getElementById('eng-list').innerHTML='<div style="display:flex;flex-wrap:wrap;gap:5px">'+engines.map(n=>`<span class="badge badge-blue">${n}</span>`).join('')+'</div>'}
-ck();setInterval(ck,15000);
+/* ── Status check — tries cloud backend, then localhost, then demo mode ── */
+async function ck(){
+  for(const backend of BACKENDS){
+    try{
+      const r=await fetch(backend+'/api/status',{signal:AbortSignal.timeout(4000)});
+      if(r.ok){A=backend;SERVER=true;const d=await r.json();
+      document.getElementById('sd').className='dot dot-g';
+      document.getElementById('st').textContent=d.engines_loaded+' engines'+(backend.includes('render')?'  (cloud)':'');
+      const e=await(await fetch(A+'/api/engines')).json();document.getElementById('eng-badge').textContent=e.length+' active';
+      document.getElementById('eng-list').innerHTML='<div style="display:flex;flex-wrap:wrap;gap:5px">'+e.map(n=>`<span class="badge badge-blue">${n}</span>`).join('')+'</div>';return}
+    }catch(e){}
+  }
+  SERVER=false;document.getElementById('sd').className='dot dot-o';document.getElementById('st').textContent='Demo Mode';
+  const engines=['EditingEngine','KnockoutEngine','CombinationEngine','ACEScoringEngine','MegaScaleEngine','ScreeningEngine','RNABaseEditEngine','TranscriptomeEngine','NonCodingEngine','FullCausalityIntegrator','SelfCorrector','DEGEngine','PathwayEngine','DrugDiscoveryEngine','DeconvolutionEngine','SingleCellEngine','MultiOmicsEngine','GWASEngine'];
+  document.getElementById('eng-badge').textContent=engines.length+' (demo)';
+  document.getElementById('eng-list').innerHTML='<div style="display:flex;flex-wrap:wrap;gap:5px">'+engines.map(n=>`<span class="badge badge-blue">${n}</span>`).join('')+'</div>'}
+ck();setInterval(ck,20000);
 
 /* ═══════ PLOTTING UTILITIES ═══════ */
 

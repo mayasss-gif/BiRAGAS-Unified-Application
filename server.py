@@ -454,16 +454,20 @@ def create_app():
     return app
 
 
+# Module-level app for cloud deployment (Render, Railway, etc.)
+app = create_app() if FASTAPI_OK else None
+
 if __name__ == "__main__":
     if not FASTAPI_OK:
         print("pip install fastapi uvicorn")
         sys.exit(1)
 
     import uvicorn
+    port = int(os.environ.get("PORT", 8000))
     print(f"\n{'='*60}")
     print(f"  BiRAGAS Unified Application v1.0")
-    print(f"  http://localhost:8000")
-    print(f"  API docs: http://localhost:8000/docs")
+    print(f"  http://localhost:{port}")
+    print(f"  API docs: http://localhost:{port}/docs")
     print(f"  Ayass Bioscience LLC")
     print(f"{'='*60}\n")
-    uvicorn.run(create_app(), host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=port)
