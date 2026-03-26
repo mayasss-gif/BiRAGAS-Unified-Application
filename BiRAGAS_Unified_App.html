@@ -547,6 +547,7 @@ BiRAGAS Unified Bioinformatics Platform v1.0 — Ayass Bioscience LLC — 837 mo
 <script>
 const A='http://localhost:8000';
 const charts={};
+let SERVER=false;
 
 /* ── Navigation ── */
 function go(p,el){
@@ -559,18 +560,134 @@ function go(p,el){
 
 /* ── Helpers ── */
 function sc(v){v=Math.min(1,Math.max(0,v));return`<div class="score"><span style="min-width:32px;font-size:.68rem">${(v*100).toFixed(0)}%</span><div class="score-track"><div class="score-fill" style="width:${v*100}%"></div></div></div>`}
-async function q(ep,bd){const o={method:bd?'POST':'GET',headers:{'Content-Type':'application/json'}};if(bd)o.body=JSON.stringify(bd);const r=await fetch(A+ep,o);if(!r.ok)throw new Error(`Server error ${r.status}`);return r.json()}
+async function q(ep,bd){
+  if(SERVER){const o={method:bd?'POST':'GET',headers:{'Content-Type':'application/json'}};if(bd)o.body=JSON.stringify(bd);const r=await fetch(A+ep,o);if(!r.ok)throw new Error(`Server error ${r.status}`);return r.json()}
+  return demoData(ep,bd);
+}
 function splitG(id){return document.getElementById(id).value.split(',').map(g=>g.trim()).filter(g=>g)}
 function mkChart(id,cfg){if(charts[id]){charts[id].destroy()}charts[id]=new Chart(document.getElementById(id),cfg)}
 const COLORS=['#2563eb','#7c3aed','#059669','#dc2626','#d97706','#0891b2','#be185d','#4f46e5','#065f46','#9333ea','#b91c1c','#a16207','#0e7490','#9d174d','#6d28d9','#047857'];
 const COLORS_A=COLORS.map(c=>c+'33');
 
+/* ═══════ DEMO DATA (works without backend) ═══════ */
+const KNOWN={KRAS:{fc:2.8,p:1e-12,drug:'Sotorasib',mech:'KRAS G12C inhibitor',drug_score:.92,chr:12,pos:25398284},BRAF:{fc:1.9,p:3e-8,drug:'Vemurafenib',mech:'BRAF V600E inhibitor',drug_score:.90,chr:7,pos:140753336},TP53:{fc:-2.1,p:5e-15,drug:'APR-246',mech:'p53 reactivator',drug_score:.65,chr:17,pos:7571720},PIK3CA:{fc:1.6,p:2e-6,drug:'Alpelisib',mech:'PI3K inhibitor',drug_score:.88,chr:3,pos:178936091},MYC:{fc:2.3,p:1e-9,drug:'JQ1',mech:'BET bromodomain inhibitor',drug_score:.45,chr:8,pos:128748315},EGFR:{fc:1.8,p:8e-7,drug:'Erlotinib',mech:'EGFR TKI',drug_score:.93,chr:7,pos:55086714},AKT1:{fc:1.2,p:4e-5,drug:'Ipatasertib',mech:'AKT inhibitor',drug_score:.82,chr:14,pos:105235686},PTEN:{fc:-1.9,p:2e-8,drug:'VO-OHpic',mech:'PTEN pathway activator',drug_score:.55,chr:10,pos:89623195},SMAD4:{fc:-1.5,p:3e-6,drug:'Galunisertib',mech:'TGFβ inhibitor',drug_score:.60,chr:18,pos:48556583},CDKN2A:{fc:-2.5,p:1e-10,drug:'Palbociclib',mech:'CDK4/6 inhibitor',drug_score:.87,chr:9,pos:21967751},CDK4:{fc:1.4,p:7e-5,drug:'Ribociclib',mech:'CDK4/6 inhibitor',drug_score:.86,chr:12,pos:58142003},RB1:{fc:-1.1,p:0.003,drug:'—',mech:'Tumor suppressor',drug_score:.20,chr:13,pos:48303747}};
+const PATHS=[{name:'MAPK signaling',source:'KEGG',cat:'Signaling',genes:'KRAS,BRAF,MAP2K1,RAF1'},{name:'PI3K-Akt signaling',source:'KEGG',cat:'Signaling',genes:'PIK3CA,AKT1,PTEN,MTOR'},{name:'p53 signaling',source:'KEGG',cat:'Cell cycle',genes:'TP53,CDKN2A,MDM2,BAX'},{name:'Ras signaling',source:'KEGG',cat:'Signaling',genes:'KRAS,BRAF,EGFR,NRAS'},{name:'Cell cycle',source:'Reactome',cat:'Cell cycle',genes:'CDK4,RB1,CDKN2A,CCND1'},{name:'Apoptosis',source:'KEGG',cat:'Cell death',genes:'TP53,BAX,BCL2,CASP3'},{name:'Pancreatic cancer',source:'KEGG',cat:'Cancer',genes:'KRAS,TP53,SMAD4,CDKN2A'},{name:'ErbB signaling',source:'KEGG',cat:'Signaling',genes:'EGFR,ERBB2,PIK3CA,AKT1'},{name:'Wnt signaling',source:'Reactome',cat:'Signaling',genes:'APC,CTNNB1,MYC,AXIN1'},{name:'mTOR signaling',source:'KEGG',cat:'Metabolism',genes:'MTOR,AKT1,PIK3CA,TSC2'},{name:'TGF-beta signaling',source:'KEGG',cat:'Signaling',genes:'SMAD4,TGFBR2,SMAD2,SMAD3'},{name:'NFkB signaling',source:'Reactome',cat:'Immune',genes:'NFKB1,RELA,IKBKG,TNF'},{name:'JAK-STAT signaling',source:'KEGG',cat:'Immune',genes:'JAK2,STAT3,STAT5A,IL6'},{name:'Notch signaling',source:'Reactome',cat:'Signaling',genes:'NOTCH1,HES1,DLL1,JAG1'},{name:'Hippo signaling',source:'KEGG',cat:'Signaling',genes:'YAP1,LATS1,MST1,TEAD1'}];
+const CELLS=['CD8+ T cells','CD4+ T cells','NK cells','B cells naive','Macrophages M1','Macrophages M2','Dendritic cells','Tregs','Monocytes','Neutrophils','Plasma cells','Mast cells','Eosinophils','Memory B cells','T follicular helper','gamma delta T','CD8+ T effector','Endothelial','Fibroblasts','Epithelial','Stellate cells','Pericytes'];
+const CLUSTERS=[{cell_type:'Ductal cells',markers:['KRT19','MUC1','EPCAM','KRT7']},{cell_type:'Acinar cells',markers:['PRSS1','AMY2A','CPA1','CELA3A']},{cell_type:'Stellate cells',markers:['ACTA2','COL1A1','FAP','PDGFRB']},{cell_type:'Macrophages M2',markers:['CD163','MRC1','MSR1','CD68']},{cell_type:'CD8+ T cells',markers:['CD8A','CD8B','GZMB','PRF1']},{cell_type:'CD4+ T cells',markers:['CD4','IL7R','CCR7','TCF7']},{cell_type:'B cells',markers:['CD19','MS4A1','CD79A','PAX5']},{cell_type:'Endothelial',markers:['PECAM1','VWF','CDH5','ENG']},{cell_type:'Fibroblasts',markers:['COL1A2','DCN','LUM','PDGFRA']},{cell_type:'NK cells',markers:['NKG7','KLRD1','GNLY','NCAM1']},{cell_type:'Tregs',markers:['FOXP3','IL2RA','CTLA4','IKZF2']},{cell_type:'Dendritic cells',markers:['ITGAX','CD1C','CLEC9A','BATF3']},{cell_type:'Mast cells',markers:['KIT','TPSAB1','CPA3','MS4A2']},{cell_type:'Plasma cells',markers:['SDC1','MZB1','JCHAIN','XBP1']}];
+
+function R(min,max){return Math.random()*(max-min)+min}
+function seed(s){let h=0;for(let i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0}return()=>{h=Math.imul(h^(h>>>16),2246822507);h=Math.imul(h^(h>>>13),3266489909);return((h^=h>>>16)>>>0)/4294967296}}
+
+function demoData(ep,bd){
+  if(ep==='/api/status')return{status:'running',engines_loaded:18,agentic_ai:true,biragas_crispr:true};
+  if(ep==='/api/engines')return['EditingEngine','KnockoutEngine','CombinationEngine','ACEScoringEngine','MegaScaleEngine','ScreeningEngine','RNABaseEditEngine','TranscriptomeEngine','NonCodingEngine','FullCausalityIntegrator','SelfCorrector','DEGEngine','PathwayEngine','DrugDiscoveryEngine','DeconvolutionEngine','SingleCellEngine','MultiOmicsEngine','GWASEngine'];
+
+  if(ep==='/api/guides'){
+    const g=bd.gene||'BRAF';const n=bd.n_guides||4;const nuc=bd.nuclease||'NGG';
+    const bases='ACGT';const guides=[];
+    for(let i=0;i<n;i++){let seq='';for(let j=0;j<(nuc.startsWith('Cas13')?22:20);j++)seq+=bases[Math.floor(R(0,4))];
+    const gc=seq.split('').filter(c=>c==='G'||c==='C').length/seq.length;
+    guides.push({sequence:seq,composite:R(0.55,0.95),gc,on_target:R(0.5,0.95),self_comp:R(0,0.3),poly_t:R(0,0.15),secondary:R(0,0.2),three_prime_g:R(0,0.5),warnings:[],knockdown_efficiency:nuc.startsWith('Cas13')?R(60,95):undefined})}
+    guides.sort((a,b)=>b.composite-a.composite);
+    return{gene:g,nuclease:nuc,n_returned:n,guides}}
+
+  if(ep==='/api/knockout'){
+    const gs=bd.genes||['KRAS','BRAF','TP53'];
+    const top=gs.map(g=>{const k=KNOWN[g]||{};return{gene:g,ensemble:R(0.3,1.2),direction:Math.random()>0.5?'suppressive':'activating',ci:[R(0.1,0.4),R(0.8,1.3)],methods:7}});
+    top.sort((a,b)=>b.ensemble-a.ensemble);
+    return{stages:{self_correction:{status:'clean'},knockout:{total:gs.length,configs:gs.length*421718/8,top_15:top},guide_design:{total_guides:gs.length*4},combinations:{total_pairs:gs.length*(gs.length-1)/2},causality:{modules_run:28,modules_failed:0,phases:7}}}}
+
+  if(ep==='/api/combinations'){
+    const syn=R(-0.6,0.4);
+    return{gene_a:bd.gene_a,gene_b:bd.gene_b,synergy:syn,models_used:12,combination_class:syn>0.1?'DNA×RNA':'DNA×DNA',type:syn>0?'synergistic':'antagonistic',cross_modal_bonus:R(0,0.3),temporal_cascade:R(0,0.2),isoform_escape:R(0,0.15)}}
+
+  if(ep==='/api/screening'){
+    const gs=bd.genes||['KRAS','BRAF','TP53'];
+    const top=gs.map(g=>({gene:g,ace:R(-0.9,0.9),n_streams:15,essentiality:Math.random()>0.5?'Core Essential':'Non-Essential',alignment:Math.random()>0.4?'Aggravating':'Protective'}));
+    top.sort((a,b)=>Math.abs(b.ace)-Math.abs(a.ace));
+    return{total_scored:gs.length,top_20:top}}
+
+  if(ep==='/api/rna'){
+    const bases='ACGU';const guides=[];
+    for(let i=0;i<4;i++){let seq='';for(let j=0;j<22;j++)seq+=bases[Math.floor(R(0,4))];
+    guides.push({sequence:seq,composite:R(0.5,0.92),gc:R(0.35,0.7),knockdown_efficiency:R(55,95)})}
+    return{gene:bd.gene,type:bd.rna_type,engine:bd.engine,guides}}
+
+  if(ep==='/api/causality'){
+    const phases={};
+    ['screening_dag','network_topology','quality_assurance','mechanism_validation','pharma_ranking','patient_stratification','report_generation'].forEach(p=>{
+      const f=Math.random()>0.9?1:0;phases[p]={modules_run:4,modules_failed:f}});
+    const mr=Object.values(phases).reduce((s,p)=>s+p.modules_run,0);const mf=Object.values(phases).reduce((s,p)=>s+p.modules_failed,0);
+    return{modules_run:mr,modules_failed:mf,phases}}
+
+  if(ep==='/api/deg'){
+    const gs=bd.genes?.length?bd.genes:['KRAS','BRAF','TP53','PIK3CA','MYC','EGFR','AKT1','PTEN','SMAD4','CDKN2A','CDK4','RB1','BRCA2','ATM','PALB2','ARID1A','MAP2K1','RAF1','NRAS','TGFBR2'];
+    const degs=gs.map(g=>{const k=KNOWN[g]||{};const fc=k.fc||(R(-3,3));const pv=k.p||(Math.pow(10,-R(1,10)));
+    return{gene:g,log2fc:fc,pvalue:pv,fdr:pv*gs.length,baseMean:R(50,2000),significant:Math.abs(fc)>1&&pv<0.05}});
+    return{status:'completed',total_genes:gs.length,up_regulated:degs.filter(d=>d.log2fc>1&&d.significant).length,down_regulated:degs.filter(d=>d.log2fc<-1&&d.significant).length,degs,tools_run:['DataLoader','DatasetDetector','MetadataExtractor','DESeq2Analyzer','GeneMapper','ErrorFixer','DEGPlotter']}}
+
+  if(ep==='/api/pathway'){
+    const gs=bd.genes||[];const matched=PATHS.filter(p=>gs.some(g=>p.genes.includes(g))).concat(PATHS).slice(0,15);
+    const pathways=matched.map(p=>({name:p.name,source:p.source,p_value:Math.pow(10,-R(2,8)),fdr:Math.pow(10,-R(1,6)),genes_in_pathway:p.genes.split(',').length,category:p.cat}));
+    const cats=[...new Set(pathways.map(p=>p.category))];
+    return{status:'completed',total_pathways:pathways.length,pathways,categories:cats}}
+
+  if(ep==='/api/drug'){
+    const gs=bd.genes||[];
+    const drugs=[];gs.forEach(g=>{const k=KNOWN[g];if(k&&k.drug!=='—')drugs.push({gene:g,drug_name:k.drug,mechanism:k.mech,druggability:k.drug_score,phase:'Approved',category:'Small molecule'});
+    drugs.push({gene:g,drug_name:g+'-ADC',mechanism:'Antibody-drug conjugate',druggability:R(0.3,0.7),phase:'Phase II',category:'Biologic'})});
+    return{status:'completed',total_candidates:drugs.length,drugs}}
+
+  if(ep==='/api/deconv'){
+    const fracs=CELLS.map(()=>R(0.001,0.15));const sum=fracs.reduce((a,b)=>a+b);
+    const cell_types=CELLS.map((c,i)=>({name:c,proportion:fracs[i]/sum,confidence:R(0.7,0.98)}));
+    cell_types.sort((a,b)=>b.proportion-a.proportion);
+    return{status:'completed',total_types:22,technique:bd.technique||'xcell',samples:1,cell_types}}
+
+  if(ep==='/api/singlecell'){
+    const clusters=CLUSTERS.map((c,i)=>{const n=Math.floor(R(200,3000));return{id:i,cell_type:c.cell_type,n_cells:n,markers:c.markers,percentage:0}});
+    const total=clusters.reduce((s,c)=>s+c.n_cells,0);clusters.forEach(c=>c.percentage=c.n_cells/total*100);
+    return{status:'completed',total_cells:total,n_clusters:clusters.length,method:'Leiden',clusters}}
+
+  if(ep==='/api/multiomics'){
+    const layers=bd.layers||['genomics','transcriptomics','epigenomics'];
+    const factors=Array.from({length:5},(_, i)=>({id:'Factor '+(i+1),variance_explained:R(0.05,0.35)*(1-i*0.15),top_genes:['KRAS','BRAF','TP53','EGFR','MYC','PIK3CA'].sort(()=>R(-1,1)).slice(0,4),layers_contributing:layers.slice(0,Math.floor(R(1,layers.length+1)))}));
+    return{status:'completed',n_layers:layers.length,integration_method:'MOFA+',factors,layers_used:layers}}
+
+  if(ep==='/api/gwas'){
+    const gs=bd.genes||['KRAS','BRAF','TP53'];
+    const hits=gs.map(g=>{const k=KNOWN[g]||{};return{gene:g,chromosome:k.chr||Math.floor(R(1,23)),position:k.pos||Math.floor(R(1e6,2e8)),p_value:Math.pow(10,-R(5,15)),beta:R(-0.5,0.8),se:R(0.05,0.15)}});
+    const methods=['IVW','MR-Egger','Weighted Median','MR-PRESSO','CAUSE'];
+    const mr=[];gs.forEach(g=>{methods.forEach(m=>{mr.push({gene:g,method:m,estimate:R(0.8,2.2),ci_low:R(0.5,0.9),ci_high:R(1.5,3.0),p_value:Math.pow(10,-R(1,6))})})});
+    return{status:'completed',gwas_hits:hits,mr_results:mr,mr_methods:methods}}
+
+  if(ep==='/api/perturbation'){
+    const gs=bd.genes||['KRAS','BRAF','TP53'];const combos=[];
+    for(let i=0;i<gs.length;i++)for(let j=i+1;j<Math.min(gs.length,6);j++){
+      const syn=R(-0.5,0.3);combos.push({genes:[gs[i],gs[j]],synergy:syn,type:syn>0?'synergistic':'antagonistic',models_used:12})}
+    combos.sort((a,b)=>b.synergy-a.synergy);
+    return{status:'completed',genes:gs,cross_modal_perturbations:combos}}
+
+  if(ep==='/api/pipeline'){
+    const gs=bd.genes||['KRAS','BRAF','TP53','EGFR','PIK3CA'];
+    const top=gs.map(g=>({gene:g,ensemble:R(0.3,1.2),direction:Math.random()>0.5?'suppressive':'activating',ci:[R(0.1,0.4),R(0.8,1.3)]}));
+    top.sort((a,b)=>b.ensemble-a.ensemble);
+    return{total_genes:gs.length,duration_seconds:R(0.5,3).toFixed(1),stages:{knockout:{total:gs.length,configs:421718,top_15:top},guide_design:{dna_guides:gs.length*4,rna_guides:gs.length*4},combinations:{total_pairs:gs.length*(gs.length-1)/2},causality:{modules_run:28,modules_failed:0},screening:{total_scored:gs.length}}}}
+
+  return{status:'demo',message:'Demo mode — start python3 start.py for live data'};
+}
+
 /* ── Status check ── */
-async function ck(){try{const r=await q('/api/status');document.getElementById('sd').className='dot dot-g';document.getElementById('st').textContent=r.engines_loaded+' engines';
-const e=await q('/api/engines');document.getElementById('eng-badge').textContent=e.length+' active';
-document.getElementById('eng-list').innerHTML='<div style="display:flex;flex-wrap:wrap;gap:5px">'+e.map(n=>`<span class="badge badge-blue">${n}</span>`).join('')+'</div>';
-}catch(e){document.getElementById('sd').className='dot dot-r';document.getElementById('st').textContent='Offline';
-document.getElementById('eng-list').innerHTML='<div class="placeholder">Start server: <code style="background:var(--surface2);padding:3px 6px;border-radius:4px">python server.py</code></div>'}}
+async function ck(){try{
+  const r=await fetch(A+'/api/status',{signal:AbortSignal.timeout(3000)});
+  if(r.ok){SERVER=true;const d=await r.json();document.getElementById('sd').className='dot dot-g';document.getElementById('st').textContent=d.engines_loaded+' engines';
+  const e=await(await fetch(A+'/api/engines')).json();document.getElementById('eng-badge').textContent=e.length+' active';
+  document.getElementById('eng-list').innerHTML='<div style="display:flex;flex-wrap:wrap;gap:5px">'+e.map(n=>`<span class="badge badge-blue">${n}</span>`).join('')+'</div>';return}
+}catch(e){}
+SERVER=false;document.getElementById('sd').className='dot dot-o';document.getElementById('st').textContent='Demo Mode';
+const engines=['EditingEngine','KnockoutEngine','CombinationEngine','ACEScoringEngine','MegaScaleEngine','ScreeningEngine','RNABaseEditEngine','TranscriptomeEngine','NonCodingEngine','FullCausalityIntegrator','SelfCorrector','DEGEngine','PathwayEngine','DrugDiscoveryEngine','DeconvolutionEngine','SingleCellEngine','MultiOmicsEngine','GWASEngine'];
+document.getElementById('eng-badge').textContent=engines.length+' (demo)';
+document.getElementById('eng-list').innerHTML='<div style="display:flex;flex-wrap:wrap;gap:5px">'+engines.map(n=>`<span class="badge badge-blue">${n}</span>`).join('')+'</div>'}
 ck();setInterval(ck,15000);
 
 /* ═══════ PLOTTING UTILITIES ═══════ */
