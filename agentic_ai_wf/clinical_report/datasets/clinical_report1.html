@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Transcriptome Report</title>
+  <link rel="stylesheet" href="clinical_report.css">
+</head>
+
+<body>
+  <!-- Jinja2 Macros -->
+  {% macro relevance_block(label, value) %}
+    {% if value %}
+    <p class="llm-description">
+      <strong>{{ label }}:</strong> {{ value }}
+    </p>
+    {% endif %}
+  {% endmacro %}
+
+  {% macro regulation_icon(regulation) %}
+    {% if regulation == "Upregulated" %}
+      <svg class="regulation-icon" viewBox="0 0 16 16" fill="#10b981">
+        <path d="M8 2l5 6H9v6H7V8H3l5-6z"/>
+      </svg>
+    {% elif regulation == "Downregulated" %}
+      <svg class="regulation-icon" viewBox="0 0 16 16" fill="#ef4444">
+        <path d="M8 14l-5-6h4V2h2v6h4l-5 6z"/>
+      </svg>
+    {% else %}
+      <svg class="regulation-icon" viewBox="0 0 16 16" fill="#6b7280">
+        <path d="M2 8h5V5l3 3-3 3v-3H2zm12 0H9v3l-3-3 3-3v3h5z"/>
+      </svg>
+    {% endif %}
+  {% endmacro %}
+
+  {% macro source_badge_class(db_id, pathway_source) %}
+    {% if pathway_source %}
+      {% if "reactome" in pathway_source|lower %}reactome
+      {% elif "kegg" in pathway_source|lower %}kegg
+      {% elif "go" in pathway_source|lower %}go-bp
+      {% else %}default
+      {% endif %}
+    {% elif db_id %}
+      {% if db_id == "GO_CC" %}go-cc
+      {% elif db_id == "GO_BP" %}go-bp
+      {% elif db_id == "GO_MF" %}go-mf
+      {% elif "kegg" in db_id|lower %}kegg
+      {% elif "reactome" in db_id|lower %}reactome
+      {% else %}default
+      {% endif %}
+    {% else %}default
+    {% endif %}
+  {% endmacro %}
+
+  <div class="clinical-report-container">
+    <!-- Header -->
+    <header class="report-header page-break-avoid">
+      <img src="{{ logo_path }}" alt="Ayass Research Institute" class="header-logo" />
+      <div class="header-content">
+        <!-- <div class="header-icon">🧬</div> -->
+        <h1 class="header-title">Transcriptome Report</h1>
+      </div>
+    </header>
+
+    <!-- Patient Profile -->
+    <section class="patient-profile page-break-avoid">
+      <h2 class="patient-title">
+        Patient Profile: {{patient_profile.name}}<sup>+</sup> | {{patient_profile.diagnosis}}<sup>+</sup>
+      </h2>
+      <p class="patient-subtitle">
+        Comprehensive transcriptomic analysis with FDA-approved treatment
+        options
+      </p>
+    </section>
+
+    <!-- Dashboard Section - HORIZONTAL DISEASE ACTIVITY ON TOP -->
+    <section class="dashboard-section keep-together">
+      <!-- Disease Activity Assessment - Horizontal Layout -->
+      <div class="disease-activity-container page-break-avoid">
+
+        <div class="disease-activity-grid">
+          <div class="activity-card severity-{{disease_activity.severity|lower}}">
+            <div class="activity-label">Disease Activity Score</div>
+            <div class="activity-value">{{disease_activity.severity}}</div>
+            <div class="activity-details">
+              Based on {{deg_stats.total_biomarkers}} disease-specific biomarkers
+            </div>
+          </div>
+
+          <div class="activity-card">
+            <div class="activity-label">Critical Genes</div>
+            {% if deg_stats.top_genes %}
+            <div class="genes-container">
+              {% set genes = deg_stats.top_genes[:9] %}
+              {% for gene in genes %}
+              <div class="gene-chip">
+                <span class="gene-symbol">{{ gene }}</span>
+              </div>
+              {% endfor %}
+            </div>
+            {% else %}
+            <div class="activity-details">No critical genes identified.</div>
+            {% endif %}
+          </div>
+
+          <div class="activity-card">
+            <div class="activity-label">Systemic Dysregulation</div>
+            <div class="activity-value">Total Dysregulated Genes: {{deg_stats.total_sig}}</div>
+            <div class="activity-details">
+              <span style="color:#16a34a;font-weight:bold;">&#8593;</span> {{deg_stats.up_count}}
+              /
+              <span style="color:#dc2626;font-weight:bold;">&#8595;</span> {{deg_stats.down_count}}
+              genes dysregulated
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Section - Side by Side Layout -->
+      <div class="charts-section">
+        <div class="charts-grid">
+
+
+          <!-- Top Dysregulated Pathways -->
+          <div class="chart-container">
+            <div class="pathways-card">
+              <h2 class="card-title">
+                <span class="card-icon">📊</span>
+                Top Dysregulated Pathways
+              </h2>
+
+              <div class="pie-chart-container">
+                <img src="data:image/png;base64,{{ pathway_info['pie_b64'] }}" alt="Pathway Distribution Pie Chart"
+                  class="pie-chart-image" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Primary Risk Factors Panel -->
+          <div class="chart-container">
+            <div class="risk-factors-card">
+              <h2 class="card-title">
+                <span class="card-icon">⚠️</span>
+                Primary Factors
+              </h2>
+
+              <div class="risk-factors-panel">
+                <div class="risk-factor-item significant">
+                  <div class="risk-factor-header">
+                    <h3 class="risk-factor-title">{{risk_factors[0].pathway_name}}</h3>
+                    <span class="risk-level significant">SIGNIFICANT</span>
+                  </div>
+                  <div class="risk-factor-content">
+                    <div class="risk-metric">
+                      <strong>{{risk_factors[0].genes[0].gene}} log2FC: {{risk_factors[0].genes[0].log2fc}}</strong> -
+                      {{risk_factors[0].gene_exp}}
+                    </div>
+
+                    <div class="risk-mechanism">
+                      <strong>Consequence:</strong> {{risk_factors[0].consequence}}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="risk-factor-item relevant">
+                  <div class="risk-factor-header">
+                    <h3 class="risk-factor-title">{{risk_factors[1].pathway_name}}</h3>
+                    <span class="risk-level high">High</span>
+                  </div>
+                  <div class="risk-factor-content">
+                    <div class="risk-metric">
+                      <strong>{{risk_factors[1].genes[0].gene}} log2FC: {{risk_factors[1].genes[0].log2fc}}</strong> -
+                      {{risk_factors[1].gene_exp}}
+                    </div>
+                    <!-- <div class="risk-description">
+                          <strong>Impact:</strong> Loss of peripheral tolerance allows nephritogenic T cell activation.
+                        </div> -->
+                    <div class="risk-mechanism">
+                      <strong>Consequence:</strong> {{risk_factors[1].consequence}}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="risk-factor-item high">
+                  <div class="risk-factor-header">
+                    <h3 class="risk-factor-title">{{risk_factors[2].pathway_name}}</h3>
+                    <span class="risk-level high">High</span>
+                  </div>
+                  <div class="risk-factor-content">
+                    <div class="risk-metric">
+                      <strong>{{risk_factors[2].genes[0].gene}} log2FC: {{risk_factors[2].genes[0].log2fc}}</strong> -
+                      {{risk_factors[2].gene_exp}}
+                    </div>
+                    <div class="risk-mechanism">
+                      <strong>Consequence:</strong> {{risk_factors[2].consequence}}
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="risk-factor-item high">
+                  <div class="risk-factor-header">
+                    <h3 class="risk-factor-title">{{risk_factors[3].pathway_name}}</h3>
+                    <span class="risk-level high">High</span>
+                  </div>
+                  <div class="risk-factor-content">
+                    <div class="risk-metric">
+                      <strong>{{risk_factors[3].genes[0].gene}} log2FC: {{risk_factors[3].genes[0].log2fc}}</strong> -
+                      {{risk_factors[3].gene_exp}}
+                    </div>
+                    <div class="risk-mechanism">
+                      <strong>Consequence:</strong> {{risk_factors[3].consequence}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="page-break-before"></div>
+
+
+<!-- Molecular Signatures Section - Modern Card Layout -->
+    {% if grouped_signatures and grouped_signatures|length > 0 %}
+    <section class="molecular-signatures-section">
+      <h2 class="main-section-title">
+        <span class="section-icon">🧬</span>
+        Key {{ disease }} Molecular Signatures
+      </h2>
+
+      <!-- Main_Class Groups -->
+      {% for main_class, group_data in grouped_signatures.items() %}
+      {% set pathways = group_data.pathways if group_data.pathways is defined else group_data %}
+      {% set representative_pathways = group_data.representative_pathways if group_data.representative_pathways is defined else pathways %}
+      {% set group_summary = group_data.group_summary if group_data.group_summary is defined else '' %}
+      {% if pathways and pathways|length > 0 %}
+      <div class="pathway-group">
+        <!-- Group Header Banner -->
+        <div class="group-header-banner">
+          <h2>📊 {{ main_class }}</h2>
+          <span class="signature-count">{{ pathways|length }} signatures</span>
+        </div>
+
+        {% if group_summary %}
+        <div class="group-summary-text group-summary-footnote">
+          <p>{{ group_summary }}</p>
+        </div>
+        {% endif %}
+
+        {% set display_count = representative_pathways|length %}
+        {% if display_count < pathways|length %}
+        <div class="representative-note">
+          Displaying {{ display_count }} representative pathways out of {{ pathways|length }} total signatures.
+        </div>
+        {% endif %}
+
+        <!-- Pathway Cards Grid -->
+        <div class="pathways-grid">
+          {% for pathway in representative_pathways %}
+          {% set regulation = pathway.Regulation or pathway.regulation or "Mixed" %}
+          {% set regulation_normalized = regulation|lower %}
+          {% if regulation_normalized == "up" %}
+            {% set regulation_class = "upregulated" %}
+          {% elif regulation_normalized == "down" %}
+            {% set regulation_class = "downregulated" %}
+          {% else %}
+            {% set regulation_class = "mixed" %}
+          {% endif %}
+          <div class="pathway-card {{ regulation_class }}">
+            <!-- <div class="representative-label">Representative Pathway</div> -->
+            <!-- Pathway Header -->
+            <div class="pathway-header">
+              {% if regulation_normalized == "up" %}
+              <span style="color:#16a34a;font-weight:bold;font-size:1.2em;">&#8593;</span>
+              {% elif regulation_normalized == "down" %}
+              <span style="color:#dc2626;font-weight:bold;font-size:1.2em;">&#8595;</span>
+              {% else %}
+              <span style="color:#6b7280;font-weight:bold;font-size:1.2em;">&#8596;</span>
+              {% endif %}
+              <span class="pathway-name">{{ pathway.Pathway_Name or pathway.pathway_name }}</span>
+              <span class="source-badge {{ source_badge_class(pathway.DB_ID, pathway.Pathway_Source) }}">
+                {% if pathway.Pathway_Source %}
+                  {{ pathway.Pathway_Source }}
+                {% elif pathway.DB_ID %}
+                  {% if pathway.DB_ID == 'GO_CC' %}GO:CC
+                  {% elif pathway.DB_ID == 'GO_BP' %}GO:BP
+                  {% elif pathway.DB_ID == 'GO_MF' %}GO:MF
+                  {% else %}{{ pathway.DB_ID }}
+                  {% endif %}
+                {% else %}Other
+                {% endif %}
+              </span>
+            </div>
+
+            <!-- Gene Information -->
+            {% set gene_summary = pathway.top_3_genes_summary or pathway.top_3_genes %}
+            {% if gene_summary %}
+            <div class="pathway-genes">
+              {% for gene in gene_summary %}
+              {% set direction = gene.direction or 'flat' %}
+              <div class="gene-badge gene-{{ direction }}">
+                <div class="gene-badge-content">
+                  <span class="gene-symbol">{{ gene.gene }}</span>
+                  <span class="gene-indicator">
+                    {% if direction == 'up' %}
+                    <span class="gene-arrow up">&#8593;</span>
+                    {% elif direction == 'down' %}
+                    <span class="gene-arrow down">&#8595;</span>
+                    {% else %}
+                    <span class="gene-arrow flat">&#8596;</span>
+                    {% endif %}
+                      <span class="gene-log2fc">
+                        {% if gene.log2fc is not none %}
+                              {{ gene.log2fc|round(3) }}
+                        {% else %}
+                              N/A
+                        {% endif %}
+                      </span>
+                  </span>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="page-break-before"></div>
+      {% endif %}
+      {% endfor %}
+    </section>
+    {% endif %}
+
+    <!-- Target Disease Drugs Section -->
+    <section class="treatments-section">
+      <h2 class="main-section-title">
+        <span class="section-icon">💊</span>
+        Best Candidate Drugs for {{ disease }}
+      </h2>
+      <p class="section-subtitle">
+        Patient Target Genes Specified · Disease-Associated · Prioritized for Clinical Relevance
+      </p>
+
+      <div class="treatments-grid keep-together">
+        {% if best_drugs and best_drugs|length > 0 %}
+          {% for drug in best_drugs %}
+          <div class="treatment-card effective page-break-avoid">
+            <div class="treatment-header">
+              <h4 class="treatment-name">{{ drug.name }}</h4>
+              <span class="treatment-status">{{ drug.status|capitalize }}</span>
+            </div>
+            <div class="pathway-activity">
+              <div class="pathway-activity-title">
+                Target: {{ drug.target_gene }} ({{ drug.target_log2fc_display }})
+              </div>
+              <div class="evidence-summary">{{ drug.summary }}</div>
+            </div>
+            <div class="effectiveness-indicator">
+              <div class="effectiveness-text">
+                Sources: {{ drug.sources }}
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        {% else %}
+          <div class="treatment-card">
+            <h4 class="treatment-name">No prioritized drugs identified</h4>
+          </div>
+        {% endif %}
+      </div>
+    </section>
+
+    <!-- Pathway Associated Drugs Section (Consolidated) -->
+    <section class="treatments-section">
+      <h2 class="main-section-title">
+        <span class="section-icon">💊</span>
+        Pathway Associated Drugs
+      </h2>
+
+      <div class="treatment-category page-break-avoid">
+        <div class="treatments-grid keep-together">
+          
+          <!-- FDA Approved Drugs -->
+          {% for d in validated_drugs_fda[:4] %}
+          <div class="treatment-card effective page-break-avoid">
+            <div class="treatment-header">
+              <h4 class="treatment-name">{{ d.drug }}</h4>
+              <span class="treatment-status effective">FDA Approved</span>
+              <div class="association-note">Evidence-Based</div>
+            </div>
+
+            <div class="pathway-activity">
+              <div class="pathway-activity-title">Clinical Evidence</div>
+              <div class="pathway-activity-subtitle">Evidence Summary</div>
+              <div class="evidence-summary">{{ d.clinical_description if d.clinical_description else 'Established therapeutic agent with proven efficacy for ' + disease + ' treatment through evidence-based clinical pathways.' }}</div>
+            </div>
+
+            <div class="effectiveness-indicator">
+              <div class="effectiveness-text">
+                Status: FDA Approved | Association: Evidence-based
+              </div>
+            </div>
+            
+            {% if d.pathway_association %}
+            <div class="additional-drugs-section">
+              <div class="evidence-summary" style="font-size: 10px; color: #6b7280;">{{ d.pathway_association }}</div>
+            </div>
+            {% endif %}
+          </div>
+          {% endfor %}
+
+          {% if drug_hits and drug_hits|length > 0 %}
+          <!-- Associated Drug Cards by Pathway -->
+          {% for drug in drug_hits %}
+          {% set loop_index = loop.index0 %}
+          {% set card_class = "effective" if loop_index % 2 == 0 else "addition" %}
+
+          <div class="treatment-card {{card_class}} page-break-avoid">
+            <div class="treatment-header">
+              <h4 class="treatment-name">{{drug.drug}}</h4>{% if drug.status %}<span class="treatment-status {% if "FDA" in drug.status %}effective{% elif "Trial" in drug.status %}addition{% else %}addition{% endif %}">{{ drug.status }}</span>{% endif %}
+              <div class="association-note">Associated with {{drug.pathway}}</div>
+            </div>
+
+
+
+            <div class="pathway-activity">
+              <div class="pathway-activity-title">{{drug.pathway}}</div>
+              <div class="pathway-activity-subtitle">Evidence Summary</div>
+              <div class="evidence-summary">{{ drug.clinical_description if drug.clinical_description else drug.evidence_summary }}</div>
+            </div>
+
+            <div class="effectiveness-indicator">
+              <div class="effectiveness-text">
+                Status: {{drug.approved}} | Association: Pathway-based
+              </div>
+            </div>
+
+            <!-- Additional Drugs as Subheadings -->
+            {% if drug.additional_drugs and drug.additional_drugs|length > 0 %}
+            <div class="additional-drugs-section">
+              <div class="additional-drugs-title">
+                <span>💊</span>
+                Alternative Options ({{drug.additional_drugs|length}})
+              </div>
+              <ul class="additional-drugs-list">
+                {% for additional_drug in drug.additional_drugs %}
+                <li class="additional-drug-item">
+                  <div class="additional-drug-name">{{additional_drug.drug}}</div>
+                  <div class="additional-drug-info">
+                    <span class="fda-status {% if additional_drug.approved == 'Approved' %}approved{% endif %}">
+                      {% if additional_drug.approved == 'Approved' %}FDA Approved{% else
+                      %}{{additional_drug.approved}}{% endif %}
+                    </span>
+                  </div>
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+            {% endif %}
+          </div>
+          {% endfor %}
+          {% else %}
+          <!-- No associated drugs found card -->
+          <div class="treatment-card">
+            <div class="treatment-header">
+              <h4 class="treatment-name">No Pathway-Associated Drugs Identified</h4>
+            </div>
+
+            <div class="pathway-activity">
+              <div class="pathway-activity-subtitle">Drug Discovery Notes</div>
+              <ul class="gene-activity-list">
+                <li class="gene-activity-item">No drugs found associated with identified pathways</li>
+                <li class="gene-activity-item">Consider broader drug discovery approaches</li>
+                <li class="gene-activity-item">Review emerging therapeutic targets</li>
+              </ul>
+            </div>
+
+            <div class="effectiveness-indicator">
+              <div class="effectiveness-text">
+                Further drug discovery analysis recommended
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </section>
+
+
+  </div>
+</body>
+
+</html>

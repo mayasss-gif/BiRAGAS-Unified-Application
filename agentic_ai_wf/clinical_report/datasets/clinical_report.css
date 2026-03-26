@@ -1,0 +1,3421 @@
+
+/* PDF-Optimized Design - Comprehensive Layout Control */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    /* Prevent text overflow and maintain readability */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.4;
+    color: #1f2937;
+    font-size: 12px;
+    background: white;
+    margin: 0;
+    padding: 0;
+    /* PDF-specific optimizations */
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    overflow-x: hidden;
+}
+
+/* Container - PDF-Optimized Layout */
+.clinical-report-container {
+    width: 190mm;
+    max-width: 190mm;
+    margin: 0 auto;
+    background: white;
+    position: relative;
+    /* PDF optimization */
+    overflow: hidden;
+    page-break-inside: avoid;
+}
+
+/* Global PDF Page Break Controls */
+.page-break-before { page-break-before: always !important; }
+.page-break-after { page-break-after: always !important; }
+.page-break-avoid { 
+    page-break-inside: auto !important; 
+    break-inside: auto !important;
+    page-break-before: auto !important;
+    page-break-after: auto !important;
+    orphans: 2;
+    widows: 2;
+}
+.keep-together { 
+    page-break-inside: auto !important; 
+    break-inside: auto !important;
+    orphans: 2;
+    widows: 2;
+}
+
+/* Header - PDF-Optimized */
+.report-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    position: relative;
+    /* PDF controls */
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    page-break-after: avoid !important;
+    orphans: 2;
+    widows: 2;
+    min-height: 60px;
+    max-height: 100px;
+    overflow: hidden;
+}
+
+.header-logo {
+    height: 50px;
+    width: auto;
+    max-width: 200px;
+    /* object-fit: contain;
+        flex-shrink: 0;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+        padding: 5px; */
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-grow: 1;
+    justify-content: center;
+}
+
+.header-icon {
+    font-size: 28px;
+    flex-shrink: 0;
+}
+
+.header-title {
+    font-size: 24px;
+    font-weight: 700;
+    text-align: center;
+    margin: 0;
+}
+
+/* Patient Profile - PDF-Optimized */
+.patient-profile {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+    color: white;
+    padding: 12px 16px;
+    text-align: center;
+    /* PDF controls */
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    page-break-before: avoid !important;
+    page-break-after: avoid !important;
+    min-height: 50px;
+    max-height: 120px;
+    overflow: hidden;
+    word-wrap: break-word;
+}
+
+.patient-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    line-height: 1.3;
+}
+
+.patient-subtitle {
+    font-size: 12px;
+    margin: 0;
+    opacity: 0.95;
+}
+
+/* Dashboard Section - PDF-Optimized Layout */
+.dashboard-section {
+    padding: 16px;
+    background: #f8fafc;
+    /* PDF optimization */
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    page-break-after: auto;
+    min-height: 350px;
+    max-height: 800px;
+    overflow: hidden;
+    orphans: 2;
+    widows: 2;
+}
+
+.disease-activity-container {
+    background: #fee2e2;
+    border: 2px solid #fecaca;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.1);
+    /* PDF optimization */
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    overflow: hidden;
+    min-height: 80px;
+    max-height: 200px;
+}
+
+.disease-activity-header {
+    margin-bottom: 16px;
+}
+
+.disease-activity-grid {
+    display: flex;
+    gap: 16px;
+    justify-content: space-between;
+    /* PDF optimization */
+    flex-wrap: nowrap;
+    overflow: hidden;
+    align-items: stretch;
+}
+
+.activity-card {
+    background: #fee2e2;
+    border: 2px solid #fecaca;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    flex: 1;
+    min-width: 0;
+    /* PDF optimization */
+    overflow: hidden;
+    word-wrap: break-word;
+    max-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Dynamic severity colors */
+.severity-high {
+    background: #fee2e2 !important;
+    border-color: #fecaca !important;
+}
+
+.severity-moderate {
+    background: #fef3c7 !important;
+    border-color: #fde68a !important;
+}
+
+.severity-mild {
+    background: #fef9c3 !important;
+    border-color: #fde047 !important;
+}
+
+.severity-low {
+    background: #f0fdf4 !important;
+    border-color: #bbf7d0 !important;
+}
+
+/* Dynamic severity text colors */
+.severity-high .activity-value {
+    color: #dc2626 !important;
+}
+
+.severity-moderate .activity-value {
+    color: #d97706 !important;
+}
+
+.severity-mild .activity-value {
+    color: #ca8a04 !important;
+}
+
+.severity-low .activity-value {
+    color: #16a34a !important;
+}
+
+.severity-high .activity-label {
+    color: #7f1d1d !important;
+}
+
+.severity-moderate .activity-label {
+    color: #92400e !important;
+}
+
+.severity-mild .activity-label {
+    color: #a16207 !important;
+}
+
+.severity-low .activity-label {
+    color: #166534 !important;
+}
+
+.activity-label {
+    font-size: 12px;
+    color: #7f1d1d;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.activity-value {
+    font-size: 16px;
+    font-weight: 800;
+    color: #dc2626;
+    margin-bottom: 4px;
+    letter-spacing: 0.5px;
+}
+
+.activity-details {
+    font-size: 10px;
+    color: #991b1b;
+    font-weight: 500;
+}
+
+/* Gene Chips Styling */
+.genes-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+    margin-top: 6px;
+    max-width: 100%;
+}
+
+.gene-chip {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    color: white;
+    border-radius: 12px;
+    padding: 3px 8px;
+    font-size: 9px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 3px rgba(220, 38, 38, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    transition: all 0.2s ease;
+    min-height: 22px;
+    width: 100%;
+}
+
+.gene-chip:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(220, 38, 38, 0.4);
+}
+
+.gene-symbol {
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.gene-priority {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    width: 14px;
+    height: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    font-weight: 800;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Responsive gene layout */
+@media print {
+    .genes-container {
+    gap: 4px;
+    }
+
+    .gene-chip {
+    padding: 3px 8px;
+    font-size: 9px;
+    min-height: 24px;
+    }
+}
+
+.charts-section {
+    margin-top: 16px;
+    /* PDF optimization */
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    overflow: hidden;
+    max-height: 600px;
+}
+
+.charts-grid {
+    display: flex;
+    gap: 16px;
+    justify-content: space-between;
+    /* PDF optimization */
+    flex-wrap: nowrap;
+    overflow: hidden;
+    align-items: stretch;
+}
+
+.chart-container {
+    flex: 1;
+    min-width: 0;
+    /* PDF optimization */
+    overflow: hidden;
+    max-height: 550px;
+}
+
+.pathways-card,
+.top-genes-card {
+    background: white;
+    border-radius: 8px;
+    padding: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+    height: 100%;
+    /* PDF optimization */
+    overflow: hidden;
+    word-wrap: break-word;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    max-height: 500px;
+}
+
+.risk-factors-card {
+    background: white;
+    border-radius: 8px;
+    padding: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+    height: auto;
+    /* PDF optimization */
+    overflow: visible;
+    word-wrap: break-word;
+    page-break-inside: auto;
+    break-inside: auto;
+    min-height: 500px;
+    max-height: none;
+}
+
+.pathways-card {
+    border-left: 5px solid #3b82f6;
+}
+
+.top-genes-card {
+    border-left: 5px solid #10b981;
+}
+
+.risk-factors-card {
+    border-left: 5px solid #dc2626;
+    background: #1f2937;
+}
+
+/* Risk Factors Panel Styles */
+.risk-factors-panel {
+    background: #1f2937;
+    padding: 10px;
+    border-radius: 8px;
+    color: white;
+    height: auto;
+    overflow: visible;
+}
+
+.risk-factor-item {
+    background: #374151;
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    border-left: 4px solid;
+    position: relative;
+}
+
+.risk-factor-item.significant {
+    border-left-color: #dc2626;
+    background: #374151;
+}
+
+.risk-factor-item.high {
+    border-left-color: #f97316;
+    background: #374151;
+}
+
+.risk-factor-item.medium {
+    border-left-color: #eab308;
+    background: #374151;
+}
+
+.risk-factor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+}
+
+.risk-factor-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.risk-level {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+    margin-left: 10px;
+}
+
+.risk-level.significant {
+    background: #dc2626;
+    color: white;
+}
+
+.risk-level.high {
+    background: #f97316;
+    color: white;
+}
+
+.risk-level.medium {
+    background: #eab308;
+    color: #1f2937;
+}
+
+.risk-factor-content {
+    font-size: 11px;
+    line-height: 1.4;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.risk-metric {
+    color: white;
+    margin-bottom: 4px;
+    font-weight: 500;
+}
+
+.risk-description {
+    color: #d1d5db;
+    margin-bottom: 8px;
+}
+
+.risk-mechanism {
+    color: #9ca3af;
+    font-size: 10px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.4;
+}
+
+.risk-factors-card .card-title {
+    color: white;
+    margin-bottom: 10px;
+}
+
+/* Key Molecular Findings Section - PDF Optimized */
+.key-findings-section {
+    padding: 8px;
+    background: white;
+    /* Enhanced PDF controls */
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    page-break-before: auto;
+    page-break-after: avoid !important;
+    overflow: hidden;
+    max-height: 300px;
+    orphans: 2;
+    widows: 2;
+}
+
+.key-findings-container {
+    background: #e3f2fd;
+    border: 1px solid #bbdefb;
+    border-radius: 6px;
+    padding: 10px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.key-findings-title {
+    color: #1565c0;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.findings-icon {
+    font-size: 14px;
+}
+
+.findings-list {
+    margin: 0;
+    padding: 0;
+}
+
+.finding-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    margin-bottom: 6px;
+    line-height: 1.3;
+}
+
+.finding-item:last-child {
+    margin-bottom: 0;
+}
+
+.finding-bullet {
+    color: #1565c0;
+    font-weight: bold;
+    font-size: 10px;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.finding-text {
+    color: #1565c0;
+    font-size: 10px;
+    font-weight: 400;
+    flex: 1;
+}
+
+.finding-text strong {
+    font-weight: 600;
+}
+
+
+/* Status chips */
+.chip { display:inline-block; padding:2px 6px; border-radius:10px; font-size:10px; font-weight:600; }
+.chip.ok { background:#dcfce7; color:#166534; }     /* ✅ */
+.chip.warn { background:#f3f4f6; color:#374151; }   /* ⚠️ */
+.chip.bad { background:#fee2e2; color:#7f1d1d; }    /* ❌ */
+.chip.patho { background:#fee2e2; color:#7f1d1d; }  /* 🔴 */
+.chip.prot { background:#d1fae5; color:#065f46; }   /* 🟢 */
+.chip.unc { background:#f3f4f6; color:#374151; }    /* ⚪ */
+
+/* Signature Type Badges */
+.signature-type-badge { 
+    display: inline-block; 
+    font-size: 0.7em; 
+    padding: 2px 6px; 
+    border-radius: 12px; 
+    margin-right: 6px; 
+    font-weight: 500;
+    white-space: nowrap;
+}
+.signature-type-badge.pathway { background-color: #1976d2; color: white; }     /* Pathways (KEGG, Reactome, etc.) */
+.signature-type-badge.go-cc { background-color: #7b1fa2; color: white; }      /* GO Cellular Compartments */
+.signature-type-badge.go-bp { background-color: #388e3c; color: white; }      /* GO Biological Processes */
+.signature-type-badge.go-mf { background-color: #f57c00; color: white; }      /* GO Molecular Functions */
+
+/* Chart Image Styles */
+.top-genes-chart-container {
+    text-align: center;
+    margin: 5px 0;
+}
+
+.top-genes-image {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    max-height: 500px;
+    display: block;
+    margin: 0 auto;
+    object-fit: contain;
+    background: white;
+}
+
+.card-title {
+    color: #1f2937;
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.card-icon {
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+/* Severity Indicator - Fixed positioning */
+.severity-indicator {
+    background: #fee2e2;
+    border: 2px solid #fecaca;
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.severity-label {
+    font-size: 10px;
+    color: #7f1d1d;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.severity-value {
+    font-size: 18px;
+    font-weight: 800;
+    color: #dc2626;
+    letter-spacing: 0.5px;
+}
+
+/* Activity Metrics - Fixed layout */
+.activity-metrics {
+    margin-bottom: 15px;
+}
+
+.metric-item {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 12px;
+    border-left: 4px solid #3b82f6;
+    margin-bottom: 8px;
+}
+
+.metric-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.metric-label {
+    font-weight: 600;
+    color: #374151;
+    font-size: 10px;
+}
+
+.metric-value {
+    font-weight: 700;
+    color: #dc2626;
+    font-size: 11px;
+}
+
+.metric-details {
+    font-size: 9px;
+    color: #6b7280;
+    margin: 2px 0;
+}
+
+/* Risk Indicator - Fixed positioning */
+.risk-indicator {
+    background: #fee2e2;
+    border: 2px solid #fecaca;
+    border-radius: 6px;
+    padding: 10px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.risk-label {
+    font-size: 10px;
+    color: #7f1d1d;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.risk-value {
+    font-size: 14px;
+    font-weight: 800;
+    color: #dc2626;
+}
+
+/* Severity Slider - Fixed positioning */
+.severity-slider {
+    position: relative;
+    margin-top: 10px;
+}
+
+.slider-track {
+    width: 100%;
+    height: 8px;
+    background: linear-gradient(to right,
+        #22c55e,
+        #eab308,
+        #f97316,
+        #dc2626);
+    border-radius: 4px;
+}
+
+.slider-indicator {
+    position: absolute;
+    top: -4px;
+    right: 10px;
+    width: 16px;
+    height: 16px;
+    background: white;
+    border: 3px solid #dc2626;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Pie Chart - Fixed dimensions */
+.pie-chart-container {
+    text-align: center;
+    margin: 5px 0;
+}
+
+.pie-chart-image {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    max-height: 500px;
+    display: block;
+    margin: 0 auto;
+    object-fit: contain;
+    background: white;
+}
+
+/* Pathway Legend - Fixed layout */
+.pathway-legend {
+    margin-top: 15px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px;
+    background: #f8fafc;
+    border-radius: 4px;
+    font-size: 10px;
+    margin-bottom: 4px;
+}
+
+.legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* Expression Overview - Fixed positioning */
+.expression-overview {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+    margin-top: 20px;
+    page-break-inside: avoid;
+}
+
+.expression-grid {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    border-spacing: 10px;
+}
+
+.expression-row {
+    display: table-row;
+}
+
+.expression-card {
+    display: table-cell;
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    position: relative;
+    width: 25%;
+}
+
+.expression-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 8px 8px 0 0;
+}
+
+.expression-number {
+    font-size: 24px;
+    font-weight: 800;
+    color: #667eea;
+    margin-bottom: 8px;
+    line-height: 1;
+}
+
+.expression-label {
+    font-size: 11px;
+    color: #6b7280;
+    font-weight: 600;
+}
+
+/* Report Sections - Fixed layout */
+.report-section {
+    padding: 16px;
+    border-bottom: 1px solid #e2e8f0;
+    background: white;
+    page-break-inside: avoid;
+    min-height: 120px;
+}
+
+.report-section:last-of-type {
+    border-bottom: none;
+}
+
+.section-title {
+    color: #1f2937;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 15px 0;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #e5e7eb;
+}
+.section-subtitle {
+    font-size: 0.9em;
+    color: #4b5563; /* Tailwind gray-600 */
+    margin-top: -6px;
+    margin-bottom: 12px;
+    font-style: italic;
+  }
+
+/* Content Cards - Fixed layout */
+.content-card {
+    background: #f9fafb;
+    padding: 15px;
+    border-radius: 6px;
+    border-left: 4px solid #6b7280;
+    margin: 10px 0;
+}
+
+.structured-content p {
+    margin-bottom: 12px;
+    color: #374151;
+    line-height: 1.5;
+    text-align: justify;
+}
+
+.structured-content h3 {
+    color: #4b5563;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 15px 0 8px 0;
+}
+
+.findings-list {
+    margin: 8px 0 12px 15px;
+    padding-left: 5px;
+}
+
+.findings-list li {
+    margin: 6px 0;
+    color: #374151;
+    list-style-type: disc;
+    line-height: 1.4;
+}
+
+/* Footer - Fixed positioning */
+.report-footer {
+    text-align: center;
+    padding: 20px;
+    background: #f9fafb;
+    color: #6b7280;
+    border-top: 1px solid #e5e7eb;
+    page-break-inside: avoid;
+}
+
+.footer-main,
+.footer-sub {
+    margin: 4px 0;
+}
+
+.footer-main strong {
+    color: #374151;
+}
+
+
+/* Key Molecular Signatures Section - PDF Optimized */
+.molecular-signatures-section,
+.treatments-section {
+    padding: 16px;
+    background: white;
+    border-bottom: 1px solid #e2e8f0;
+    /* Enhanced PDF controls - Allow natural breaking */
+    page-break-inside: auto;
+    break-inside: auto;
+    page-break-before: auto;
+    page-break-after: auto;
+    orphans: 1;
+    widows: 1;
+    overflow: visible;
+}
+
+.main-section-title {
+    color: #1f2937;
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 16px 0;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #6366f1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    page-break-after: auto;
+    /* Allow natural flow */
+    orphans: 1;
+    widows: 1;
+    /* Prevent text wrapping */
+    white-space: nowrap;
+    overflow: visible;
+}
+
+.section-icon {
+    font-size: 18px;
+}
+
+/* Drug section specific title styling */
+.treatments-section .main-section-title {
+    min-width: max-content;
+    flex-shrink: 0;
+    word-break: keep-all;
+    text-wrap: nowrap;
+}
+
+.signature-category,
+.treatment-category {
+    margin-bottom: 18px;
+    /* PDF optimization - Allow natural breaking for large sections */
+    page-break-inside: auto;
+    break-inside: auto;
+    page-break-after: auto;
+    overflow: visible;
+    word-wrap: break-word;
+    orphans: 1;
+    widows: 1;
+}
+
+.category-header {
+    background: #e5e7eb;
+    padding: 8px 16px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    /* Allow natural flow */
+    page-break-after: auto;
+    orphans: 1;
+    widows: 1;
+}
+
+.category-header.interferon-active {
+    background: #6366f1;
+    color: white;
+}
+
+.category-title {
+    font-size: 13px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.signature-content {
+    padding: 0 8px;
+}
+
+.signature-subtitle {
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+    margin: 0 0 15px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.fire-icon {
+    font-size: 16px;
+}
+
+
+/* PATHWAY CARD STYLES - PDF Optimized */
+.pathway-card {
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 12px;
+    border-left: 4px solid #dc2626;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    /* PDF optimization - Allow breaking */
+    page-break-inside: auto;
+    break-inside: auto;
+    overflow: visible;
+    word-wrap: break-word;
+    max-height: none;
+    orphans: 1;
+    widows: 1;
+}
+
+.pathway-card:nth-child(even) {
+    border-left-color: #2563eb;
+}
+
+.pathway-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.pathway-icon {
+    font-size: 14px;
+    color: #dc2626;
+    background: #fee2e2;
+    padding: 6px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+}
+
+.pathway-card:nth-child(even) .pathway-icon {
+    color: #2563eb;
+    background: #dbeafe;
+}
+
+.pathway-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1f2937;
+    margin: 0;
+    flex: 1;
+}
+
+.pathway-genes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.gene-badge {
+    background: #f3f4f6;
+    border: 1px solid #d1d5db;
+    border-radius: 16px;
+    padding: 4px 8px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #374151;
+    display: inline-block;
+}
+
+.pathway-description {
+    font-size: 11px;
+    color: #4b5563;
+    line-height: 1.4;
+    margin-bottom: 8px;
+    text-align: justify;
+}
+
+/* LLM Generated Description Styles */
+.pathway-description-llm {
+    margin-top: 10px;
+    padding: 12px;
+    background: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%);
+    border-left: 4px solid #3b82f6;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.llm-description {
+    font-size: 12px;
+    color: #1e293b;
+    line-height: 1.5;
+    margin: 0;
+    font-style: italic;
+    text-align: justify;
+}
+
+/* Category header styles for regulation types */
+.category-header {
+    margin-bottom: 12px;
+    padding: 8px 12px;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+.category-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #334155;
+    margin: 0;
+}
+
+.clinical-impact {
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: 6px;
+    padding: 8px;
+    font-size: 10px;
+    color: #0c4a6e;
+    line-height: 1.3;
+}
+
+.clinical-impact strong {
+    font-weight: 600;
+    color: #075985;
+}
+
+/* DYNAMIC GENES GRID - FLEXBOX LAYOUT */
+.genes-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-start;
+}
+
+.gene-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+    flex: 0 0 calc(25% - 8px);
+    /* 4 cards per row with gap */
+    min-width: 120px;
+    box-sizing: border-box;
+}
+
+.gene-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 4px;
+}
+
+.gene-fc {
+    font-size: 11px;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+/* DYNAMIC TREATMENTS GRID - PDF Optimized */
+.treatments-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 16px;
+    /* PDF optimization */
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    overflow: hidden;
+    max-height: 800px;
+}
+
+.treatment-card {
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    position: relative;
+    /* PDF optimization */
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    overflow: hidden;
+    word-wrap: break-word;
+    max-height: 600px;
+    orphans: 2;
+    widows: 2;
+}
+
+.treatment-card.effective {
+    border-color: #3b82f6;
+    border-left: 5px solid #3b82f6;
+}
+
+.treatment-card.addition {
+    border-color: #10b981;
+    border-left: 5px solid #10b981;
+}
+
+.treatment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    flex-direction: column;
+}
+
+.association-note {
+    font-size: 12px;
+    color: #6b7280;
+    font-style: italic;
+    margin-top: 4px;
+}
+
+.treatment-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0;
+    flex: 1;
+}
+
+.treatment-status {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-left: 12px;
+}
+
+.treatment-status.effective {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.treatment-status.addition {
+    background: #d1fae5;
+    color: #059669;
+}
+
+.pathway-activity {
+    margin-bottom: 12px;
+}
+
+/* Additional Drugs Section */
+.additional-drugs-section {
+    /* border-top: 1px solid #e5e7eb; */
+    margin-top: 12px;
+    padding-top: 10px;
+    margin-bottom: 12px;
+}
+
+.additional-drugs-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.additional-drugs-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.additional-drug-item {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 8px 10px;
+    margin-bottom: 6px;
+    font-size: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.additional-drug-item:last-child {
+    margin-bottom: 0;
+}
+
+.additional-drug-name {
+    font-weight: 600;
+    color: #1f2937;
+    flex: 1;
+}
+
+.additional-drug-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 9px;
+}
+
+.fda-status {
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.fda-status.approved {
+    color: #16a34a;
+    font-weight: 600;
+}
+
+/* Patient History Prioritization Section */
+.patient-history-prioritization {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border: 2px solid #f59e0b;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 20px 0;
+    page-break-inside: avoid;
+}
+
+.prioritization-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.prioritization-icon {
+    font-size: 18px;
+    color: #d97706;
+}
+
+.prioritization-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #92400e;
+    margin: 0;
+}
+
+.prioritization-subtitle {
+    font-size: 11px;
+    color: #78350f;
+    margin: 0 0 12px 0;
+    font-style: italic;
+}
+
+.ranked-drugs-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 16px 0;
+}
+
+.ranked-drug-item {
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid #fbbf24;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.ranked-drug-item:last-child {
+    margin-bottom: 0;
+}
+
+.rank-number {
+    background: #f59e0b;
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.ranked-drug-info {
+    flex: 1;
+}
+
+.ranked-drug-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: #92400e;
+    margin-bottom: 2px;
+}
+
+.ranked-drug-mechanism {
+    font-size: 10px;
+    color: #78350f;
+    font-style: italic;
+    line-height: 1.3;
+}
+
+.rationale-summary {
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid #fbbf24;
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 12px;
+}
+
+.rationale-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: #92400e;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.rationale-text {
+    font-size: 10px;
+    color: #78350f;
+    line-height: 1.4;
+}
+
+.pathway-activity-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 6px;
+}
+
+.pathway-activity-subtitle {
+    font-size: 10px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.effective .pathway-activity-subtitle {
+    color: #2563eb;
+}
+
+.addition .pathway-activity-subtitle {
+    color: #3b26dc;
+}
+
+.gene-activity-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 12px 12px;
+}
+
+.gene-activity-item {
+    font-size: 10px;
+    color: #4b5563;
+    margin-bottom: 2px;
+    position: relative;
+}
+
+.gene-activity-item::before {
+    content: "•";
+    color: #6b7280;
+    position: absolute;
+    left: -8px;
+}
+
+.mixed-activity {
+    margin-bottom: 12px;
+}
+
+.mixed-activity-title {
+    font-size: 10px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 4px;
+}
+
+.effectiveness-indicator {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 6px;
+    padding: 8px;
+    margin-bottom: 12px;
+}
+
+.effectiveness-text {
+    font-size: 10px;
+    color: #166534;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.effectiveness-text::before {
+    content: "✓";
+    color: #16a34a;
+    font-weight: bold;
+}
+
+.warning-indicator {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 6px;
+    padding: 8px;
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+}
+
+.warning-icon {
+    color: #d97706;
+    font-size: 12px;
+    margin-top: 1px;
+}
+
+.warning-text {
+    font-size: 10px;
+    color: #92400e;
+    font-weight: 500;
+    flex: 1;
+}
+
+/* Footer - Fixed positioning */
+.report-footer {
+    text-align: center;
+    padding: 16px;
+    background: #f9fafb;
+    color: #6b7280;
+    border-top: 1px solid #e5e7eb;
+    page-break-inside: avoid;
+}
+
+.footer-main,
+.footer-sub {
+    margin: 4px 0;
+}
+
+.footer-main strong {
+    color: #374151;
+}
+
+/* RESPONSIVE BEHAVIOR FOR DYNAMIC LAYOUTS */
+@media (max-width: 1200px) {
+    .gene-card {
+    flex: 0 0 calc(33.333% - 7px);
+    /* 3 cards per row */
+    }
+}
+
+@media (max-width: 900px) {
+    .gene-card {
+    flex: 0 0 calc(50% - 5px);
+    /* 2 cards per row */
+    }
+
+    .treatment-card {
+    flex: 0 0 100%;
+    /* 1 card per row */
+    }
+
+    /* Stack disease activity cards on medium screens */
+    .disease-activity-container {
+    padding: 15px;
+    margin-bottom: 25px;
+    }
+
+    .disease-activity-grid {
+    flex-direction: column;
+    gap: 15px;
+    }
+
+    .activity-card {
+    flex: none;
+    width: 100%;
+    }
+
+    /* Stack charts vertically on medium screens */
+    .charts-grid {
+    flex-direction: column;
+    gap: 20px;
+    }
+
+    .chart-container {
+    flex: none;
+    width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    .gene-card {
+    flex: 0 0 100%;
+    /* 1 card per row */
+    }
+
+    .expression-card {
+    flex: 0 0 100%;
+    /* 1 card per row */
+    }
+
+    /* Ensure charts stack properly on mobile */
+    .charts-grid {
+    flex-direction: column !important;
+    gap: 15px !important;
+    }
+
+    .chart-container {
+    flex: none !important;
+    width: 100% !important;
+    }
+}
+
+/* PDF-Specific Overrides - Comprehensive */
+@media print {
+    * {
+    /* Force consistent PDF rendering */
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    }
+
+    body {
+    font-size: 11px !important;
+    line-height: 1.3 !important;
+    /* Prevent page issues */
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow-x: hidden !important;
+    }
+
+    .clinical-report-container {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    }
+
+    /* Page break controls for PDF */
+    .page-break-before { 
+    page-break-before: always !important; 
+    break-before: page !important;
+    }
+
+    .header-logo {
+    height: 70px;
+    width: 190px;
+    /* max-width: 150px; */
+    }
+
+    /* Force horizontal disease activity layout to stay intact */
+    .disease-activity-container {
+    background: #fee2e2 !important;
+    border: 2px solid #fecaca !important;
+    border-radius: 10px !important;
+    padding: 12px !important;
+    margin-bottom: 16px !important;
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.1) !important;
+    }
+
+    .disease-activity-grid {
+    display: flex !important;
+    gap: 15px !important;
+    justify-content: space-between !important;
+    }
+
+    .activity-card {
+    flex: 1 !important;
+    min-width: 0 !important;
+    }
+
+    .charts-section {
+    margin-top: 16px !important;
+    }
+
+    .charts-grid {
+    display: flex !important;
+    gap: 12px !important;
+    justify-content: space-between !important;
+    }
+
+    .chart-container {
+    flex: 1 !important;
+    min-width: 0 !important;
+    }
+
+    .pathways-card,
+    .top-genes-card {
+    border-radius: 8px !important;
+    padding: 8px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    border: 1px solid #e2e8f0 !important;
+    height: 100% !important;
+    }
+
+    .risk-factors-card {
+    border-radius: 8px !important;
+    padding: 8px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    border: 1px solid #e2e8f0 !important;
+    height: auto !important;
+    min-height: 500px !important;
+    max-height: none !important;
+    }
+
+    .pathways-card,
+    .top-genes-card {
+    background: white !important;
+    }
+
+    .risk-factors-card {
+    background: #1f2937 !important;
+    border-left: 5px solid #dc2626 !important;
+    }
+
+    .risk-factors-panel {
+    background: #1f2937 !important;
+    padding: 10px !important;
+    border-radius: 8px !important;
+    color: white !important;
+    height: auto !important;
+    overflow: visible !important;
+    page-break-inside: auto !important;
+    }
+
+    .risk-factor-item {
+    background: #374151 !important;
+    border-radius: 8px !important;
+    padding: 10px 12px !important;
+    margin-bottom: 8px !important;
+    border-left: 4px solid !important;
+    page-break-inside: avoid !important;
+    }
+
+    .risk-factor-item.critical {
+    border-left-color: #dc2626 !important;
+    }
+
+    .risk-factor-item.high {
+    border-left-color: #f97316 !important;
+    }
+
+    .risk-factor-item.medium {
+    border-left-color: #eab308 !important;
+    }
+
+    .risk-factor-title {
+    color: white !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    }
+
+    .risk-level.critical {
+    background: #dc2626 !important;
+    color: white !important;
+    }
+
+    .risk-level.high {
+    background: #f97316 !important;
+    color: white !important;
+    }
+
+    .risk-level.medium {
+    background: #eab308 !important;
+    color: #1f2937 !important;
+    }
+
+    .risk-metric {
+    color: white !important;
+    }
+
+    .risk-description {
+    color: #d1d5db !important;
+    }
+
+    .risk-mechanism {
+    color: #9ca3af !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    line-height: 1.4 !important;
+    }
+
+    .risk-factors-card .card-title {
+    color: white !important;
+    }
+
+    .pie-chart-image,
+    .top-genes-image {
+    width: 100% !important;
+    height: auto !important;
+    max-width: 100% !important;
+    max-height: 450px !important;
+    }
+
+    .expression-grid {
+    display: table !important;
+    width: 100% !important;
+    table-layout: fixed !important;
+    border-spacing: 8px !important;
+    }
+
+    .expression-row {
+    display: table-row !important;
+    }
+
+    .expression-card {
+    display: table-cell !important;
+    width: 25% !important;
+    }
+
+    /* Ensure components stay in position */
+    .pathways-card,
+    .top-genes-card {
+    min-height: 500px;
+    height: auto;
+    }
+
+    /* Enhanced Page Break Controls */
+    .dashboard-section {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    page-break-after: auto !important;
+    overflow: hidden !important;
+    max-height: 900px !important;
+    }
+
+    .expression-overview {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    overflow: hidden !important;
+    }
+
+    .report-section {
+    padding: 16px !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    min-height: 100px !important;
+    max-height: 800px !important;
+    overflow: hidden !important;
+    orphans: 2 !important;
+    widows: 2 !important;
+    }
+
+    /* Global overflow prevention */
+    .activity-card,
+    .chart-container,
+    .pathway-card,
+    .treatment-card,
+    .key-findings-section {
+    overflow: hidden !important;
+    word-wrap: break-word !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    }
+
+    /* Text and content sizing optimization */
+    h1, h2, h3, h4, h5, h6 {
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    hyphens: auto !important;
+    }
+
+    p, div, span {
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    hyphens: auto !important;
+    max-width: 100% !important;
+    }
+
+    /* Image optimization */
+    img {
+    max-width: 100% !important;
+    height: auto !important;
+    object-fit: contain !important;
+    }
+
+    /* Table and grid optimization */
+    table, .grid, .flex {
+    width: 100% !important;
+    table-layout: fixed !important;
+    }
+
+    /* Prevent blank pages */
+    .page-break-avoid {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    page-break-before: avoid !important;
+    page-break-after: avoid !important;
+    }
+
+    .keep-together {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    orphans: 3 !important;
+    widows: 3 !important;
+    }
+
+    .expression-grid {
+    grid-template-columns: none !important;
+    }
+
+    .molecular-signatures-section,
+    .treatments-section {
+    padding: 16px !important;
+    page-break-inside: auto !important;
+    break-inside: auto !important;
+    orphans: 1;
+    widows: 1;
+    overflow: visible !important;
+    }
+
+    .main-section-title {
+    color: #1f2937 !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    margin: 0 0 16px 0 !important;
+    padding-bottom: 8px !important;
+    border-bottom: 2px solid #6366f1 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    page-break-after: auto !important;
+    orphans: 1 !important;
+    widows: 1 !important;
+    /* Prevent text wrapping */
+    white-space: nowrap !important;
+    overflow: visible !important;
+    }
+
+    .section-icon {
+    font-size: 18px !important;
+    }
+
+    /* Drug section specific title styling */
+    .treatments-section .main-section-title {
+    min-width: max-content !important;
+    flex-shrink: 0 !important;
+    word-break: keep-all !important;
+    text-wrap: nowrap !important;
+    }
+
+    .signature-category,
+    .treatment-category {
+    margin-bottom: 18px !important;
+    page-break-inside: auto !important;
+    break-inside: auto !important;
+    page-break-after: auto !important;
+    overflow: visible !important;
+    orphans: 1 !important;
+    widows: 1 !important;
+    }
+
+    .category-header {
+    background: #e5e7eb !important;
+    padding: 8px 16px !important;
+    border-radius: 6px !important;
+    margin-bottom: 10px !important;
+    page-break-after: auto !important;
+    orphans: 1 !important;
+    widows: 1 !important;
+    }
+
+    .category-header.interferon-active {
+    background: #6366f1 !important;
+    color: white !important;
+    }
+
+    .category-title {
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    margin: 0 !important;
+    }
+
+    .signature-content {
+    padding: 0 8px !important;
+    }
+
+    /* Pathway Card Print Styles */
+    .pathway-card {
+    background: #f8fafc !important;
+    border: 2px solid #e2e8f0 !important;
+    border-radius: 8px !important;
+    padding: 12px !important;
+    margin-bottom: 12px !important;
+    border-left: 4px solid #dc2626 !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1) !important;
+    page-break-inside: auto !important;
+    break-inside: auto !important;
+    page-break-after: auto !important;
+    overflow: visible !important;
+    max-height: none !important;
+    orphans: 1 !important;
+    widows: 1 !important;
+    }
+
+    .pathway-card:nth-child(even) {
+    border-left-color: #2563eb !important;
+    }
+
+    .pathway-header {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin-bottom: 10px !important;
+    }
+
+    .pathway-icon {
+    font-size: 14px !important;
+    color: #dc2626 !important;
+    background: #fee2e2 !important;
+    padding: 6px !important;
+    border-radius: 6px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 28px !important;
+    height: 28px !important;
+    }
+
+    .pathway-card:nth-child(even) .pathway-icon {
+    color: #2563eb !important;
+    background: #dbeafe !important;
+    }
+
+    .pathway-title {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: #1f2937 !important;
+    margin: 0 !important;
+    flex: 1 !important;
+    }
+
+    .pathway-genes {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+    margin-bottom: 10px !important;
+    }
+
+    .gene-badge {
+    background: #f3f4f6 !important;
+    border: 1px solid #d1d5db !important;
+    border-radius: 16px !important;
+    padding: 4px 8px !important;
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    color: #374151 !important;
+    display: inline-block !important;
+    }
+
+    .pathway-description {
+    font-size: 11px !important;
+    color: #4b5563 !important;
+    line-height: 1.4 !important;
+    margin-bottom: 8px !important;
+    text-align: justify !important;
+    }
+
+    /* Responsive LLM Description Styles */
+    .pathway-description-llm {
+    margin-top: 10px !important;
+    padding: 10px !important;
+    background: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%) !important;
+    border-left: 4px solid #3b82f6 !important;
+    border-radius: 6px !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+    }
+
+    .llm-description {
+    font-size: 11px !important;
+    color: #1e293b !important;
+    line-height: 1.4 !important;
+    margin: 0 !important;
+    font-style: italic !important;
+    text-align: justify !important;
+    }
+
+    .category-header {
+    margin-bottom: 10px !important;
+    padding: 6px 10px !important;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%) !important;
+    border-radius: 6px !important;
+    border: 1px solid #e2e8f0 !important;
+    }
+
+    .category-title {
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    color: #334155 !important;
+    margin: 0 !important;
+    }
+
+    .clinical-impact {
+    background: #f0f9ff !important;
+    border: 1px solid #bae6fd !important;
+    border-radius: 6px !important;
+    padding: 8px !important;
+    font-size: 10px !important;
+    color: #0c4a6e !important;
+    line-height: 1.3 !important;
+    }
+
+    .clinical-impact strong {
+    font-weight: 600 !important;
+    color: #075985 !important;
+    }
+
+    /* Key Molecular Findings Print Styles */
+    .key-findings-section {
+    padding: 8px !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    page-break-after: auto;
+    }
+
+    .key-findings-container {
+    background: #e3f2fd !important;
+    border: 1px solid #bbdefb !important;
+    border-radius: 6px !important;
+    padding: 10px !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .key-findings-title {
+    color: #1565c0 !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    margin: 0 0 8px 0 !important;
+    gap: 6px !important;
+    }
+
+    .findings-icon {
+    font-size: 14px !important;
+    }
+
+    .finding-item {
+    gap: 6px !important;
+    margin-bottom: 6px !important;
+    line-height: 1.3 !important;
+    }
+
+    .finding-bullet {
+    color: #1565c0 !important;
+    font-weight: bold !important;
+    font-size: 10px !important;
+    margin-top: 1px !important;
+    }
+
+    .finding-text {
+    color: #1565c0 !important;
+    font-size: 10px !important;
+    }
+
+    .finding-text strong {
+    font-weight: 600 !important;
+    }
+
+    /* Treatment Cards Print Styles */
+    .treatments-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 16px !important;
+    margin-top: 16px !important;
+    }
+
+    .treatment-card {
+    background: white !important;
+    border: 2px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+    padding: 7px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    }
+
+    .treatment-card.effective {
+    border-color: #3b82f6 !important;
+    border-left: 5px solid #3b82f6 !important;
+    }
+
+    .treatment-card.addition {
+    border-color: #10b981 !important;
+    border-left: 5px solid #10b981 !important;
+    }
+
+    .treatment-header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: flex-start !important;
+    margin-bottom: 12px !important;
+    }
+
+    .treatment-name {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    color: #1f2937 !important;
+    margin: 0 !important;
+    flex: 1 !important;
+    }
+
+    .treatment-status {
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    padding: 4px 8px !important;
+    border-radius: 12px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    margin-left: 12px !important;
+    }
+
+    .treatment-status.effective {
+    background: #dbeafe !important;
+    color: #1e40af !important;
+    }
+
+    .treatment-status.addition {
+    background: #d1fae5 !important;
+    color: #059669 !important;
+    }
+
+    .pathway-activity {
+    margin-bottom: 12px !important;
+    }
+
+    /* Additional Drugs Print Styles */
+    .additional-drugs-section {
+    /* border-top: 1px solid #e5e7eb !important; */
+    margin-top: 12px !important;
+    padding-top: 10px !important;
+    margin-bottom: 12px !important;
+    }
+
+    .additional-drugs-title {
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    color: #374151 !important;
+    margin-bottom: 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    }
+
+    .additional-drugs-list {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    }
+
+    .additional-drug-item {
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 6px !important;
+    padding: 8px 10px !important;
+    margin-bottom: 6px !important;
+    font-size: 10px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    }
+
+    .additional-drug-item:last-child {
+    margin-bottom: 0 !important;
+    }
+
+    /* Patient History Prioritization Print Styles */
+    .patient-history-prioritization {
+    background: #fef3c7 !important;
+    border: 2px solid #f59e0b !important;
+    border-radius: 12px !important;
+    padding: 16px !important;
+    margin: 20px 0 !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    }
+
+    .prioritization-header {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin-bottom: 12px !important;
+    }
+
+    .prioritization-icon {
+    font-size: 18px !important;
+    color: #d97706 !important;
+    }
+
+    .prioritization-title {
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    color: #92400e !important;
+    margin: 0 !important;
+    }
+
+    .prioritization-subtitle {
+    font-size: 11px !important;
+    color: #78350f !important;
+    margin: 0 0 12px 0 !important;
+    font-style: italic !important;
+    }
+
+    .ranked-drugs-list {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 0 16px 0 !important;
+    }
+
+    .ranked-drug-item {
+    background: rgba(255, 255, 255, 0.7) !important;
+    border: 1px solid #fbbf24 !important;
+    border-radius: 8px !important;
+    padding: 10px !important;
+    margin-bottom: 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    }
+
+    .ranked-drug-item:last-child {
+    margin-bottom: 0 !important;
+    }
+
+    .rank-number {
+    background: #f59e0b !important;
+    color: white !important;
+    width: 24px !important;
+    height: 24px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    flex-shrink: 0 !important;
+    }
+
+    .ranked-drug-info {
+    flex: 1 !important;
+    }
+
+    .ranked-drug-name {
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    color: #92400e !important;
+    margin-bottom: 2px !important;
+    }
+
+    .ranked-drug-mechanism {
+    font-size: 10px !important;
+    color: #78350f !important;
+    font-style: italic !important;
+    line-height: 1.3 !important;
+    }
+
+    .rationale-summary {
+    background: rgba(255, 255, 255, 0.8) !important;
+    border: 1px solid #fbbf24 !important;
+    border-radius: 8px !important;
+    padding: 12px !important;
+    margin-top: 12px !important;
+    }
+
+    .rationale-title {
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    color: #92400e !important;
+    margin-bottom: 6px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    }
+
+    .rationale-text {
+    font-size: 10px !important;
+    color: #78350f !important;
+    line-height: 1.4 !important;
+    }
+
+    .additional-drug-name {
+    font-weight: 600 !important;
+    color: #1f2937 !important;
+    flex: 1 !important;
+    }
+
+    .additional-drug-info {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    font-size: 9px !important;
+    }
+
+    .fda-status {
+    color: #6b7280 !important;
+    font-weight: 500 !important;
+    }
+
+    .fda-status.approved {
+    color: #16a34a !important;
+    font-weight: 600 !important;
+    }
+
+    .pathway-activity-title {
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    color: #374151 !important;
+    margin-bottom: 6px !important;
+    }
+
+    .pathway-activity-subtitle {
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    margin-bottom: 8px !important;
+    }
+
+    .effective .pathway-activity-subtitle {
+    color: #2563eb !important;
+    }
+
+    .addition .pathway-activity-subtitle {
+    color: #2f26dc !important;
+    }
+
+    .gene-activity-list {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 0 12px 12px !important;
+    }
+
+    .gene-activity-item {
+    font-size: 10px !important;
+    color: #4b5563 !important;
+    margin-bottom: 2px !important;
+    position: relative !important;
+    }
+
+    .gene-activity-item::before {
+    content: "•" !important;
+    color: #6b7280 !important;
+    position: absolute !important;
+    left: -8px !important;
+    }
+
+    .mixed-activity {
+    margin-bottom: 12px !important;
+    }
+
+    .mixed-activity-title {
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    color: #374151 !important;
+    margin-bottom: 4px !important;
+    }
+
+    .effectiveness-indicator {
+    background: #f0fdf4 !important;
+    border: 1px solid #bbf7d0 !important;
+    border-radius: 6px !important;
+    padding: 8px !important;
+    margin-bottom: 12px !important;
+    }
+
+    .effectiveness-text {
+    font-size: 10px !important;
+    color: #166534 !important;
+    font-weight: 500 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    }
+
+    .effectiveness-text::before {
+    content: "✓" !important;
+    color: #16a34a !important;
+    font-weight: bold !important;
+    }
+
+    .warning-indicator {
+    background: #fffbeb !important;
+    border: 1px solid #fde68a !important;
+    border-radius: 6px !important;
+    padding: 8px !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 6px !important;
+    }
+
+    .warning-icon {
+    color: #d97706 !important;
+    font-size: 12px !important;
+    margin-top: 1px !important;
+    }
+
+    .warning-text {
+    font-size: 10px !important;
+    color: #92400e !important;
+    font-weight: 500 !important;
+    flex: 1 !important;
+    }
+}
+
+/* Disable all responsive behavior for PDF */
+@media (max-width: 768px) {
+    .header-logo {
+    height: 70px;
+    width: 130px;
+    max-width: 120px;
+    }
+
+    .header-title {
+    font-size: 18px;
+    }
+
+    .disease-activity-container {
+    padding: 10px !important;
+    margin-bottom: 16px !important;
+    }
+
+    .disease-activity-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 15px !important;
+    }
+
+    .activity-card {
+    flex: none !important;
+    width: 100% !important;
+    }
+
+    .expression-grid {
+    display: table !important;
+    table-layout: fixed !important;
+    }
+
+    .expression-card {
+    display: table-cell !important;
+    width: 25% !important;
+    }
+}
+
+/* Validation Section Styles */
+.validation-summary-section {
+    margin-bottom: 24px;
+    padding: 16px;
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    border-radius: 8px;
+    page-break-inside: avoid;
+}
+
+.validation-overview {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 12px;
+}
+
+.quality-score-card {
+    text-align: center;
+    padding: 12px;
+    background: white;
+    border-radius: 8px;
+    border: 2px solid #d1d5db;
+}
+
+.quality-score-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1f2937;
+}
+
+.quality-score-label {
+    font-size: 10px;
+    color: #6b7280;
+    margin-top: 2px;
+}
+
+.quality-level {
+    font-size: 9px;
+    font-weight: bold;
+    margin-top: 4px;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.quality-level.quality-high {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.quality-level.quality-medium {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.quality-level.quality-low {
+    background: #fecaca;
+    color: #991b1b;
+}
+
+.validation-stats {
+    display: flex;
+    gap: 16px;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 20px;
+    font-weight: bold;
+    color: #1f2937;
+}
+
+.stat-label {
+    font-size: 9px;
+    color: #6b7280;
+}
+
+.validation-interpretation {
+    font-size: 11px;
+    color: #374151;
+    background: white;
+    padding: 8px;
+    border-radius: 4px;
+    border-left: 4px solid #3b82f6;
+}
+
+/* Validated Items Sections */
+.validated-genes-section,
+.validated-pathways-section,
+.validated-drugs-section {
+    margin-bottom: 24px;
+    page-break-inside: avoid;
+}
+
+.validation-category {
+    margin-bottom: 16px;
+}
+
+.validation-category-title {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    padding: 6px 12px;
+    border-radius: 4px;
+}
+
+.validation-category-title.high-confidence {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.validation-category-title.medium-confidence {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.validated-items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 12px;
+}
+
+.validated-item {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 12px;
+    font-size: 11px;
+}
+
+.item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.item-name {
+    font-weight: bold;
+    color: #1f2937;
+}
+
+.confidence-badge {
+    font-size: 9px;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.confidence-badge.high {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.confidence-badge.medium {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.confidence-badge.low {
+    background: #fecaca;
+    color: #991b1b;
+}
+
+.item-log2fc {
+    font-size: 10px;
+    color: #6b7280;
+    margin-bottom: 4px;
+}
+
+.item-evidence {
+    font-size: 11px;
+    color: #374151;
+    line-height: 1.4;
+    font-style: italic;
+    margin-top: 4px;
+}
+
+/* Pathway Validation Styles */
+.validated-pathway-item {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 8px;
+    font-size: 11px;
+}
+
+.pathway-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+}
+
+.pathway-name {
+    font-weight: bold;
+    color: #1f2937;
+    flex: 1;
+}
+
+.regulation-badge {
+    font-size: 9px;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.regulation-badge.up {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.regulation-badge.down {
+    background: #fecaca;
+    color: #991b1b;
+}
+
+.pathway-evidence {
+    font-size: 10px;
+    color: #374151;
+}
+
+.evidence-text {
+    margin-bottom: 4px;
+    line-height: 1.3;
+}
+
+.evidence-sources {
+    font-size: 9px;
+    color: #6b7280;
+}
+
+/* Drug Categories */
+.drug-category {
+    margin-bottom: 16px;
+}
+
+.drug-category-title {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    padding: 6px 12px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.drug-category.fda-approved .drug-category-title {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.drug-category.clinical-trials .drug-category-title {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.drug-category.experimental .drug-category-title {
+    background: #f3e8ff;
+    color: #7c3aed;
+}
+
+.validated-drug-item {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 8px;
+    font-size: 11px;
+}
+
+.drug-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.drug-name {
+    font-weight: bold;
+    color: #1f2937;
+}
+
+.drug-details {
+    font-size: 10px;
+    color: #374151;
+}
+
+.drug-mechanism {
+    margin-bottom: 4px;
+    font-weight: 500;
+}
+
+.drug-evidence {
+    line-height: 1.3;
+}
+
+/* Network Visualization */
+.network-visualization-section {
+    margin-bottom: 24px;
+    page-break-inside: avoid;
+}
+
+.network-plot-container {
+    text-align: center;
+    margin: 16px 0;
+}
+
+.network-plot {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+}
+
+.network-description {
+    font-size: 10px;
+    color: #6b7280;
+    text-align: center;
+    margin-top: 8px;
+    line-height: 1.4;
+}
+
+/* Disease-Focused Enhancement Styles */
+.executive-summary-section {
+    margin-bottom: 24px;
+    padding: 16px;
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    border-radius: 8px;
+    border-left: 4px solid #3b82f6;
+}
+
+.executive-summary-content {
+    font-size: 11px;
+    line-height: 1.5;
+    color: #374151;
+}
+
+.direction-badge {
+    font-size: 8px;
+    font-weight: bold;
+    padding: 2px 4px;
+    border-radius: 3px;
+    margin-left: 4px;
+}
+
+.direction-badge.upregulated {
+    background: #fecaca;
+    color: #991b1b;
+}
+
+.direction-badge.downregulated {
+    background: #bfdbfe;
+    color: #1e40af;
+}
+
+.biomarker-potential {
+    font-size: 9px;
+    color: #059669;
+    margin-bottom: 4px;
+}
+
+.validation-category.pathogenic .validation-category-title {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.validation-category.protective .validation-category-title {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.pathogenic-pathway {
+    border-left: 3px solid #dc2626;
+}
+
+.protective-pathway {
+    border-left: 3px solid #16a34a;
+}
+
+.impact-badge {
+    font-size: 8px;
+    font-weight: bold;
+    padding: 2px 4px;
+    border-radius: 3px;
+    margin-left: 4px;
+}
+
+.impact-badge.high {
+    background: #fecaca;
+    color: #991b1b;
+}
+
+.impact-badge.medium {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.impact-badge.low {
+    background: #e5e7eb;
+    color: #6b7280;
+}
+
+.recommendation-badge {
+    font-size: 8px;
+    font-weight: bold;
+    padding: 2px 4px;
+    border-radius: 3px;
+    margin-left: 4px;
+}
+
+.recommendation-badge.strong {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.recommendation-badge.moderate {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.recommendation-badge.consider-for-trials {
+    background: #e0e7ff;
+    color: #4338ca;
+}
+
+.recommendation-badge.research-only {
+    background: #f3e8ff;
+    color: #7c3aed;
+}
+
+.evidence-strength {
+    font-size: 9px;
+    color: #6b7280;
+    margin-top: 4px;
+}
+
+/* Disease Context Header Styles */
+.disease-context-header {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border: 2px solid #0ea5e9;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.disease-specific-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.disease-label {
+    font-size: 10px;
+    font-weight: bold;
+    color: #0369a1;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.disease-name {
+    font-size: 14px;
+    font-weight: bold;
+    color: #1e40af;
+    border-bottom: 2px solid #3b82f6;
+    padding-bottom: 2px;
+}
+
+.validation-counts {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.validated-count {
+    font-size: 9px;
+    background: #dbeafe;
+    color: #1e40af;
+    padding: 3px 6px;
+    border-radius: 12px;
+    font-weight: bold;
+}
+
+.disease-context-badge {
+    font-size: 8px;
+    background: #059669;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 10px;
+    margin-left: 8px;
+    font-weight: bold;
+}
+
+.status-badge { 
+    display: inline-block; 
+    font-size: 10px; 
+    font-weight: 700; 
+    padding: 3px 6px; 
+    border-radius: 12px;
+    background: #f3f4f6; 
+    color: #374151;
+    margin-right: 6px;
+}
+.status-badge.pathogenic { background: #fee2e2; color: #991b1b; }
+.status-badge.protective { background: #dcfce7; color: #166534; }
+.status-badge.uncertain { background: #e5e7eb; color: #374151; }
+.confidence-note { font-size: 9px; color: #6b7280; }
+
+/* Source badge styles */
+.source-badge {
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75em;
+    font-weight: normal;
+}
+.source-badge.pathway-source { background-color: #3b82f6; }
+.source-badge.go-source { background-color: #10b981; }
+
+/* Pathway group and card styles */
+.pathway-group {
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    margin: 16px 0;
+    padding: 16px;
+    background-color: #f9fafb;
+}
+
+.main-class-title {
+    color: #1f2937;
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: 0 0 16px 0;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #d1d5db;
+}
+
+.main-class-count {
+    font-size: 0.7em;
+    font-weight: normal;
+    color: #6b7280;
+    margin-left: 8px;
+}
+
+.pathway-title {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pathway-genes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;                  /* slightly tighter spacing */
+    margin-top: 8px;
+  }
+  
+  .gene-badge {
+    display: flex;             /* allow better internal alignment */
+    flex-direction: column;    /* stack symbol + indicator vertically */
+    align-items: center;
+    justify-content: center;
+    max-width: 120px;          /* slightly wider for better readability */
+    padding: 4px 6px;          /* slightly more padding */
+    margin: 2px;
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+    background-color: #f3f4f6;
+    font-size: 0.8em;          /* increased from 0.7em */
+    text-align: center;
+    word-wrap: break-word;
+    word-break: break-word;
+  }
+  
+  .gene-badge.gene-up {
+    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+    border-color: rgba(52, 211, 153, 0.5);
+  }
+  
+  .gene-badge.gene-down {
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+    border-color: rgba(248, 113, 113, 0.5);
+  }
+  
+  .gene-badge.gene-flat {
+    background: linear-gradient(135deg, #f9fafb 0%, #e5e7eb 100%);
+    border-color: rgba(156, 163, 175, 0.5);
+  }
+  
+  .gene-symbol {
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    font-size: 0.8em;          /* increased from 0.7em for better readability */
+    line-height: 1.3;          /* slightly more spacing for readability */
+    word-break: break-word;
+    white-space: normal;
+  }
+  
+  .gene-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    font-size: 0.75em;         /* increased from 0.65em for better readability */
+    flex-wrap: nowrap;
+  }
+  
+  .gene-arrow {
+    font-size: 1.0em;          /* increased from 0.9em for better visibility */
+  }
+  
+  .gene-arrow.up { color: #16a34a; }
+  .gene-arrow.down { color: #dc2626; }
+  .gene-arrow.flat { color: #6b7280; }
+  
+  .gene-log2fc {
+    font-weight: 600;          /* increased weight for better readability */
+    font-size: 1.0em;          /* explicit size for log2fc values */
+  }
+
+.gene-metrics,
+.gene-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.metric-chip {
+    background: rgba(37, 99, 235, 0.12);
+    color: #1d4ed8;
+    border-radius: 9999px;
+    padding: 2px 6px;
+    font-size: 0.7em;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+}
+
+.meta-chip {
+    background: rgba(107, 114, 128, 0.12);
+    color: #374151;
+    border-radius: 6px;
+    padding: 2px 6px;
+    font-size: 0.68em;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+.pathway-description-llm {
+    margin-top: 8px;
+}
+
+.llm-description {
+    font-size: 0.9em;
+    color: #374151;
+    margin: 4px 0;
+    font-style: italic;
+}
+
+.group-summary {
+    margin-top: 16px;
+    padding: 12px;
+    background-color: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: 6px;
+}
+
+.group-summary p {
+    margin: 0;
+    color: #0c4a6e;
+    font-size: 0.9em;
+}
+
+/* Modern Pathway Cards */
+.pathways-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+    margin: 16px 0;
+}
+
+.pathway-card {
+    background: white;
+    border-radius: 8px;
+    padding: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-left: 4px solid #6b7280;
+    page-break-inside: avoid;
+    break-inside: avoid;
+}
+
+.pathway-card.upregulated {
+    background: #ecfdf5;
+    border-left-color: #10b981;
+}
+
+.pathway-card.downregulated {
+    background: #fef2f2;
+    border-left-color: #ef4444;
+}
+
+.pathway-card.mixed {
+    background: #f9fafb;
+    border-left-color: #6b7280;
+}
+
+.pathway-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+}
+
+.regulation-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+.pathway-name {
+    font-weight: 600;
+    color: #1f2937;
+    font-size: 0.9em;
+    flex: 1;
+}
+
+.source-badge {
+    font-size: 0.7em;
+    padding: 2px 6px;
+    border-radius: 12px;
+    font-weight: 500;
+    color: white;
+}
+
+.source-badge.reactome { background-color: #7c3aed; }
+.source-badge.kegg { background-color: #059669; }
+.source-badge.go-cc { background-color: #dc2626; }
+.source-badge.go-bp { background-color: #2563eb; }
+.source-badge.go-mf { background-color: #ea580c; }
+.source-badge.default { background-color: #6b7280; }
+
+.pathway-genes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.gene-badge {
+    background-color: #f3f4f6;
+    border: 1px solid #d1d5db;
+    padding: 2px 6px;
+    border-radius: 12px;
+    font-size: 0.75em;
+    font-weight: 500;
+    color: #374151;
+}
+
+.group-header-banner {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: white;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.group-header-banner h2 {
+    margin: 0;
+    font-size: 1.2em;
+    font-weight: 600;
+}
+
+.signature-count {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    font-weight: 500;
+}
+
+.group-summary {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border: 1px solid #bae6fd;
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 16px;
+}
+
+.summary-stats {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.8em;
+    font-weight: 500;
+}
+
+.stat-icon {
+    width: 14px;
+    height: 14px;
+}
+
+/* PDF Print Styles */
+@media print {
+    .pathways-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+    }
+    
+    .pathway-card {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    }
+}

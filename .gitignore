@@ -1,0 +1,40 @@
+# Secrets
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# Logs
+logs/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Data files (too large for git)
+*.sqlite
+*.pkl
+*.h5
+*.hdf5
+*.csv
+*.tsv
+*.log
+agentic_ai_wf/ipaa_causality/data/
+agentic_ai_wf/multiomics_pipeline_agent/Data/
+agentic_ai_wf/logs/
+agentic_ai_wf/tools/patient_degs.csv
+agentic_ai_wf/perturbation_pipeline_agent/input_data/
+
+# Old/backup HTML
+BiRAGAS_Unified_App_old.html
+BiRAGAS_Unified_App_v2.html

@@ -1,0 +1,45 @@
+# Virtual environment
+.venv/
+venv/
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# VS Code
+.vscode/
+
+GEO_directory/
+temporary/
+executed_code/
+gene_prioritization/datasets/z-scores_final.csv
+processed_pathways/
+All_Analyses/
+ALL_ANALYSIS/
+agent_execution.log
+# Environment variables
+.env
+
+.DS_Store
+
+temporary/*
+GEO_directory/*
+AE_directory/*
+logs/*
+*.env
+uv.lock
+
+agentic_ai_wf/results/*
+agentic_ai_wf/GEO_directory/*
+agentic_ai_wf/AE_Directory/*
+agentic_ai_wf/ALL_ANALYSIS/*
+agentic_ai_wf/reports/*
+agentic_ai_wf/output/*
+agentic_ai_wf/logs/*
+
+cohort_data/*
+demo_custom/*
+demo_output/*
+*.zip
+agentic_ai_wf/multiomics_pipeline_agent/Data
+agentic_ai_wf/mdp_pipeline_agent/multi_pathway/data/*

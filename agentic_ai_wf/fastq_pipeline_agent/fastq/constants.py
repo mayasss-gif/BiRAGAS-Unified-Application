@@ -1,0 +1,1 @@
+INDEX_PATH = "/media/shared/team-workspace/raafeh/fastq_pipeline/refs/salmon_index_GRCh38"
